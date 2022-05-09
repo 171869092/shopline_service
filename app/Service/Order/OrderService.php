@@ -7,12 +7,10 @@ use Hyperf\Di\Annotation\Inject;
 class OrderService
 {
     /**
-     * @var
      */
     protected $model;
 
     /**
-     * @var
      */
     protected $item;
 
