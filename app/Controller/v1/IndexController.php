@@ -14,8 +14,6 @@ use App\Constants\ErrorCode;
 use App\Kernel\Oauth\WeChatFactory;
 use App\Model\Store;
 use App\Model\User;
-use App\Model\UserBelong;
-use App\Model\WechatApplet;
 use App\Service\User\UserService;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\HttpServer\Annotation\RequestMapping;
@@ -41,18 +39,6 @@ use App\Annotation\NotAuth;
  */
 class IndexController extends AbstractController
 {
-    /**
-     * @Inject()
-     * @var UserService
-     */
-    protected $userService;
-
-    /**
-     * @Inject()
-     * @var WeChatFactory
-     */
-    protected $wechatService;
-
     /**
      * @Inject
      * @var ContainerInterface
