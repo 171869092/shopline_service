@@ -11,10 +11,8 @@ declare(strict_types=1);
  */
 namespace App\Controller\v1;
 use App\Constants\ErrorCode;
-use App\Kernel\Oauth\WeChatFactory;
 use App\Model\Store;
 use App\Model\User;
-use App\Service\User\UserService;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
