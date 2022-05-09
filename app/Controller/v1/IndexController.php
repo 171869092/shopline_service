@@ -140,6 +140,15 @@ class IndexController extends AbstractController
     }
 
     /**
+     * @RequestMapping(path="index", methods="get")
+     */
+    public function index(RequestInterface $request, ResponseInterface $response)
+    {
+        echo 33333;
+        return $response->json(['msg' => 'ok']);
+    }
+
+    /**
      * @RequestMapping(path="wxapp_login", methods="post")
      * @param RequestInterface $request
      * @param ResponseInterface $response
