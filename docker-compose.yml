@@ -1,0 +1,29 @@
+version: "3.1"
+networks:
+  shopline:
+    driver: bridge
+    external: true
+services:
+  shopline_server:
+    build: ./
+    container_name: shopline_server
+    working_dir: /data/project
+    tty: true
+    volumes:
+      - .:/data/project
+    ports:
+      - "9591:9501"
+      - "9592:9502"
+      - "9594:9504"
+    command: php bin/hyperf.php start
+    networks:
+      shopline:
+        ipv4_address: 179.21.0.8
+  redis:
+    image: redis:alpine
+    container_name: shopline_server_redis
+    ports:
+     - "6690:6379"
+    networks:
+      shopline:
+        ipv4_address: 179.21.0.4
