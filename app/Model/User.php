@@ -76,9 +76,9 @@ use Qbhy\HyperfAuth\Authenticatable;
  * @property int $has_read_lpk_treaty
  * @property int $level_type
  */
-class User extends Model implements Authenticatable
+class User extends Model
 {
-    use AuthAbility;
+//    use AuthAbility;
     /**
      * The table associated with the model.
      *

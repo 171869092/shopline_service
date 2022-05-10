@@ -13,6 +13,7 @@ namespace App\Controller\v1;
 use App\Constants\ErrorCode;
 use App\Model\Store;
 use App\Model\User;
+use App\Service\Store\StoreService;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
@@ -44,6 +45,12 @@ class IndexController extends AbstractController
     protected $container;
 
     /**
+     * @Inject
+     * @var StoreService
+     */
+    protected $storeService;
+
+    /**
      * @RequestMapping(path="signin", methods="post")
      * @param RequestInterface $request
      * @param ResponseInterface $response
@@ -70,29 +77,6 @@ class IndexController extends AbstractController
     }
 
     /**
-     * sign up
-     * @RequestMapping(path="signup", methods="post")
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     */
-    public function signup(RequestInterface $request, ResponseInterface $response)
-    {
-        try {
-            if (empty($request->post('phone')) || empty($request->post('password'))){
-                throw new \Exception('Params error');
-            }
-            if ($request->post('password') !== $request->post('passwords')){
-                throw new \Exception('Two inconsistent passwords');
-            }
-            $user = $this->userService->save($request->post());
-            $data = $this->auth->login($user);
-            return $response->json(['code' => 200, 'msg' => 'ok','data' => $data]);
-        }catch (\Exception $e){
-            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
-        }
-    }
-
-    /**
      * install
      * @RequestMapping(path="install", methods="get")
      * @param RequestInterface $request
@@ -105,7 +89,8 @@ class IndexController extends AbstractController
             if (!$get = $request->all()){
                 throw new \Exception('Params error');
             }
-            $token = $this->userService->generateToken($get, $get['hamc']);
+
+            $token = '';
             return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $token]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
@@ -113,14 +98,12 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @RequestMapping(path="live", methods="get")
+     * @RequestMapping(path="call", methods="get")
      */
     public function live(RequestInterface $request, ResponseInterface $response)
     {
-        echo 33333;
-        echo "\r\n";
-        print_r($this->wechatService->create()->access_token->getToken());
-        return $response->json(['msg' => 'ok']);
+        $result = $this->storeService->ex($request->all());
+        return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
     }
 
     /**
@@ -128,8 +111,10 @@ class IndexController extends AbstractController
      */
     public function index(RequestInterface $request, ResponseInterface $response)
     {
-        echo 33333;
-        return $response->json(['msg' => 'ok']);
+        $store = Store::query()->where(['store_name' => 'livetest'])->first();
+        /**@var Store $store*/
+        $data = $this->auth->login($store);
+        return $response->json(['code' => 200,'msg' => 'ok', 'token' => $data]);
     }
 
     /**
