@@ -72,6 +72,8 @@ class Request
                     $respone = $client->post($url,[
                         'body' => $array
                     ]);
+                    echo "req = \r\n";
+                    print_r($respone);
                     return [
                         'coroutine_id' => Coroutine::id(),
                         'code' => $respone->getStatusCode(),
