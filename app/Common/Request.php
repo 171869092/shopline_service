@@ -55,13 +55,13 @@ class Request
         return 'https://'. $handle .'.myshopline.com/admin/oauth-web/#/oauth/authorize?appKey='.$this->appKey.'&responseType=code&scope='.$scope.'&redirectUri='.$redirectUri;
     }
 
-    public function authToken(string $url, array $array) :string
+    public function authToken(string $uri,string $url, array $array) :string
     {
         try {
             $result = parallel([
-                function () use($url, $array) {
+                function () use($uri, $url, $array) {
                     $client = new Client([
-                        'base_uri' => $url,
+                        'base_uri' => $uri,
                         'handler' => HandlerStack::create(new CoroutineHandler()),
                         'timeout' => 5,
                         'swoole' => [

@@ -80,7 +80,7 @@ class IndexController extends AbstractController
     /**
      * @RequestMapping(path="call", methods="get")
      */
-    public function live(RequestInterface $request, ResponseInterface $response)
+    public function call(RequestInterface $request, ResponseInterface $response)
     {
         /**
          * 1; 先检测店铺是否在系统注册
@@ -96,8 +96,9 @@ class IndexController extends AbstractController
             if (!isset($params['handle']) || !isset($params['sign']) || !isset($params['code'])) {
                 throw new \Exception('参数错误,请重新安装');
             }
-            $url = 'https://'.$params['handle'].'.myshopline.com/admin/oauth/token/create';
-            $token = $this->resServer->authToken($url, [
+            $uri = 'https://'.$params['handle'].'.myshopline.com';
+            $url = '/admin/oauth/token/create';
+            $token = $this->resServer->authToken($uri, $url, [
                 'appkey' => $params['appkey'],
                 'sign' => $params['sign'],
                 'timestamp' => $params['timestamp'],
