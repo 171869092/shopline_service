@@ -14,7 +14,4 @@ return [
         \Hyperf\Session\Middleware\SessionMiddleware::class,
         \App\Middleware\JwtAuthMiddleware::class,
     ],
-    'socket-io' => [
-        \App\Middleware\WebSocketAuthMiddleware::class,
-    ],
 ];
