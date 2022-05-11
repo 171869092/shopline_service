@@ -91,8 +91,23 @@ class IndexController extends AbstractController
          * 2> 确认授权后携带code到callbck地址
          * 3> 验证sign,携带code 创建token,并保存
          */
-        $result = $this->storeService->ex($request->all());
-        return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
+        try {
+            $params = $request->all();
+            if (!isset($params['handle']) || !isset($params['sign']) || !isset($params['code'])) {
+                throw new \Exception('参数错误,请重新安装');
+            }
+            $url = 'https://'.$params['handle'].'.myshopline.com/admin/oauth/token/create';
+            $token = $this->resServer->authToken($url, [
+                'appkey' => $params['appkey'],
+                'sign' => $params['sign'],
+                'timestamp' => $params['timestamp'],
+                'code' => $params['code']
+                ]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
+//        $result = $this->storeService->ex($request->all());
+        return $response->json(['code' => 200,'msg' => 'ok', 'data' => $token]);
     }
 
     /**
@@ -112,6 +127,7 @@ class IndexController extends AbstractController
                 if (!$link){
                     throw new \Exception('拼接授权地址失败;');
                 }
+                return $response->json(['code' => 200,'msg' => 'link', 'data' => $link]);
             }
             /**@var Store $store*/
             $data = $this->auth->login($store);

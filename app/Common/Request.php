@@ -55,11 +55,11 @@ class Request
         return 'https://'. $handle .'.myshopline.com/admin/oauth-web/#/oauth/authorize?appKey='.$this->appKey.'&responseType=code&scope='.$scope.'&redirectUri='.$redirectUri;
     }
 
-    public function requestAuth(string $url, string $method = 'get')
+    public function authToken(string $url, array $array) :string
     {
         try {
             $result = parallel([
-                function () use($url) {
+                function () use($url, $array) {
                     $client = new Client([
                         'base_uri' => $url,
                         'handler' => HandlerStack::create(new CoroutineHandler()),
@@ -69,7 +69,9 @@ class Request
                             'socket_buffer_size' => 1024 * 1024 * 2
                         ]
                     ]);
-                    $respone = $client->get($url);
+                    $respone = $client->post($url,[
+                        'body' => $array
+                    ]);
                     return [
                         'coroutine_id' => Coroutine::id(),
                         'code' => $respone->getStatusCode(),
@@ -79,7 +81,7 @@ class Request
                 }
             ]);
             print_r($result);
-            return true;
+            return $result['body'];
         }catch (\Exception $e){
 
         }catch (\Throwable $e){
