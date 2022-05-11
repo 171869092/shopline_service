@@ -102,6 +102,15 @@ class IndexController extends AbstractController
      */
     public function live(RequestInterface $request, ResponseInterface $response)
     {
+        /**
+         * 1; 先检测店铺是否在系统注册
+         * 2; 存在就直接进入后续逻辑
+         * 3; 如果不存在就进入授权流程
+         * @: 授权流程
+         * 1> 拼接授权地址,重定向到授权页面,用户点击授权
+         * 2> 确认授权后携带code到callbck地址
+         * 3> 验证sign,携带code 创建token,并保存
+         */
         $result = $this->storeService->ex($request->all());
         return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
     }

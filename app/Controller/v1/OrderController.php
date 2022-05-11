@@ -41,9 +41,9 @@ class OrderController extends AbstractController
     public function notify(RequestInterface $request, ResponseInterface $response)
     {
         try {
-
+            return $response->json(['code' => 200, 'msg' => 'ok']);
         }catch (\Exception $e){
-
+            return $response->json(['code' => 200, 'msg' => $e->getMessage()]);
         }catch (\Throwable $e){
             //. 这里的需要记录日志
             $this->logger->get('order_callback_error','order_callback_error')

@@ -11,37 +11,13 @@ class OrderService
     protected $model;
 
     /**
-     */
-    protected $item;
-
-    /**
      * @Inject
      * @var OrderLog
      */
     protected $orderLog;
 
-    /**
-     * @var
-     */
-    protected $cartSerive;
-
-    /**
-     * 分单
-     * @param array $params
-     * @return array
-     */
-    public function splitOrder(array $params) :array
+    public function webHook(array $params) :bool
     {
-        return [];
-    }
-
-    /**
-     * 支付
-     * @param array $params
-     * @return array
-     */
-    public function pay(array $params) :array
-    {
-        return [];
+        return true;
     }
 }
