@@ -69,11 +69,13 @@ class Request
                             'socket_buffer_size' => 1024 * 1024 * 2
                         ]
                     ]);
+                    $sign = $this->sign($array['code'],$array['handle']);
+                    echo 'sign = '. $sign. "\r\n";
                     $respone = $client->post($url,[
                         'form_params' => ['code' => $array['code']],
                         'headers' => [
                             'appkey' => $array['appkey'],
-                            'sign' => $array['sign'],
+                            'sign' => $this->sign($array['code'],$array['handle']),
                             'timestamp' => $array['timestamp']
                             ]
                     ]);
@@ -88,7 +90,7 @@ class Request
                 }
             ]);
             print_r($result);
-            return $result['body'];
+            return $result['body'][0]['body'] ?? '';
         }catch (\Exception $e){
 
         }catch (\Throwable $e){

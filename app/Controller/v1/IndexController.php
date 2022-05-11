@@ -102,7 +102,8 @@ class IndexController extends AbstractController
                 'appkey' => $params['appkey'],
                 'sign' => $params['sign'],
                 'timestamp' => $params['timestamp'],
-                'code' => $params['code']
+                'code' => $params['code'],
+                'handle' => $params['handle']
                 ]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
