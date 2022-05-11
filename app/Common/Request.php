@@ -30,17 +30,23 @@ class Request
      */
     protected $url;
 
-    public function sign(string $code, string $handle) :string
+    public function sign(string $code, string $handle ,string $timestamp, string $method = 'get') :string
     {
-        $query = ['appkey' => $this->appKey,'code' => $code, 'handle' => $handle, 'timestamp' => time()];
-        ksort($query);
-        $temp = [];
-        foreach ($query as $qey)
-        {
-            array_push($temp, $qey);
+        if ($method == 'get'){
+            $query = ['appkey' => $this->appKey,'code' => $code, 'handle' => $handle, 'timestamp' => time()];
+            ksort($query);
+            $temp = [];
+            foreach ($query as $qey)
+            {
+                array_push($temp, $qey);
+            }
+            $str = implode('&',$temp);
+            $sign = hash_hmac('sha256', $str,$this->appSecret);
+        }else{
+            $newCode = json_encode(['code' => $code]);
+            $sign = hash_hmac('sha256', "{$newCode}{$timestamp}",$this->appSecret);
         }
-        $str = implode('&',$temp);
-        return hash_hmac('sha256', $str,$this->appSecret);
+        return $sign;
     }
 
     /**
@@ -69,13 +75,13 @@ class Request
                             'socket_buffer_size' => 1024 * 1024 * 2
                         ]
                     ]);
-                    $sign = $this->sign($array['code'],$array['handle']);
+                    $sign = $this->sign($array['code'],$array['handle'],$array['timestamp'], 'post');
                     echo 'sign = '. $sign. "\r\n";
                     $respone = $client->post($url,[
                         'form_params' => ['code' => $array['code']],
                         'headers' => [
                             'appkey' => $array['appkey'],
-                            'sign' => $this->sign($array['code'],$array['handle']),
+                            'sign' => $sign,
                             'timestamp' => $array['timestamp']
                             ]
                     ]);
