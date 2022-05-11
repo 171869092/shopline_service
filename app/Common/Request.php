@@ -70,7 +70,12 @@ class Request
                         ]
                     ]);
                     $respone = $client->post($url,[
-                        'body' => $array
+                        'form_params' => ['code' => $array['code']],
+                        'headers' => [
+                            'appkey' => $array['appkey'],
+                            'sign' => $array['sign'],
+                            'timestamp' => $array['timestamp']
+                            ]
                     ]);
                     echo "req = \r\n";
                     print_r($respone);
