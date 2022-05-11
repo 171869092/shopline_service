@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 namespace App\Controller\v1;
+use App\Common\Request;
 use App\Constants\ErrorCode;
 use App\Model\Store;
 use App\Model\User;
@@ -49,6 +50,12 @@ class IndexController extends AbstractController
      * @var StoreService
      */
     protected $storeService;
+
+    /**
+     * @Inject
+     * @var Request
+     */
+    protected $resServer;
 
     /**
      * @RequestMapping(path="signin", methods="post")
@@ -120,10 +127,25 @@ class IndexController extends AbstractController
      */
     public function index(RequestInterface $request, ResponseInterface $response)
     {
-        $store = Store::query()->where(['store_name' => 'livetest'])->first();
-        /**@var Store $store*/
-        $data = $this->auth->login($store);
-        return $response->json(['code' => 200,'msg' => 'ok', 'token' => $data]);
+        try {
+            $params = $request->all();
+            if (!isset($params['handle']) || !isset($params['sign'])){
+                throw new \Exception('params error');
+            }
+            $store = Store::query()->where(['store_name' => $params['handle']])->first();
+            #. 未找到就进入授权安装流程
+            if (!$store->exists()){
+                $link = $this->resServer->oauth($params['handle']);
+                if (!$link){
+                    throw new \Exception('拼接授权地址失败;');
+                }
+            }
+            /**@var Store $store*/
+            $data = $this->auth->login($store);
+            return $response->json(['code' => 200,'msg' => 'ok', 'token' => $data]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
     }
 
     /**

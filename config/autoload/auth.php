@@ -193,7 +193,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => \Qbhy\HyperfAuth\Provider\EloquentProvider::class,
-            'model' => App\Model\User::class, //  需要实现 Qbhy\HyperfAuth\Authenticatable 接口
+            'model' => \App\Model\Store::class, //  需要实现 Qbhy\HyperfAuth\Authenticatable 接口
         ]
     ],
 ];
