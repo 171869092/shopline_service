@@ -86,10 +86,7 @@ class Request
                             'sign' => $sign,
                             'timestamp' => $array['timestamp'],
                             'Content-Type' => 'application/json'
-                            #'Content-Type:application/json;charset=UTF-8'
                             ],
-                            #'Content-Type:application/json;charset=UTF-8',
-                            #'Content-Type' => 'application/json'
                     ]);
                     echo "req = \r\n";
                     print_r($respone);
