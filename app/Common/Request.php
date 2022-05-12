@@ -61,6 +61,13 @@ class Request
         return 'https://'. $handle .'.myshopline.com/admin/oauth-web/#/oauth/authorize?appKey='.$this->appKey.'&responseType=code&scope='.$scope.'&redirectUri='.$redirectUri;
     }
 
+    /**
+     * 请求token
+     * @param string $uri
+     * @param string $url
+     * @param array $array
+     * @return string
+     */
     public function authToken(string $uri,string $url, array $array) :string
     {
         try {
@@ -78,9 +85,7 @@ class Request
                     $sign = $this->sign($array['code'],$array['handle'],$array['timestamp'], 'post');
                     echo 'sign = '. $sign. "\r\n";
                     $respone = $client->post($url,[
-                        #'form_params' => ['code' => $array['code']],
                         'body' => json_encode(['code' => $array['code']]),
-                        #'body' => ['code' => $array['code']],
                         'headers' => [
                             'appkey' => $array['appkey'],
                             'sign' => $sign,
@@ -101,9 +106,9 @@ class Request
             print_r($result);
             return $result['body'][0]['body'] ?? '';
         }catch (\Exception $e){
-
+            throw new \Exception($e->getMessage());
         }catch (\Throwable $e){
-
+            print_r($e->getMessage());
         }
     }
 }

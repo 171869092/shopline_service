@@ -13,8 +13,10 @@ namespace App\Controller\v1;
 use App\Common\Request;
 use App\Constants\ErrorCode;
 use App\Model\Store;
+use App\Model\Token;
 use App\Service\Store\StoreService;
 use Hyperf\Contract\ConfigInterface;
+use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -78,6 +80,7 @@ class IndexController extends AbstractController
     }
 
     /**
+     * 安装授权的地方
      * @RequestMapping(path="call", methods="get")
      */
     public function call(RequestInterface $request, ResponseInterface $response)
@@ -105,11 +108,22 @@ class IndexController extends AbstractController
                 'code' => $params['code'],
                 'handle' => $params['handle']
                 ]);
+            if (!$token) throw new \Exception('获取token失败,请联系开发人员');
+            $token = json_decode($token, true);
+            Db::beginTransaction();
+            #. 保存token
+            $sToken = Token::insert(['handle' => $params['handle'], 'update_time' => date('Y-m-d H:i:s')]);
+            $store = Store::insert(['store_name' => $params['handle'], 'token' => $token['accessToken'], 'create_time' => date('Y-m-d H:i:s')]);
+            if (!$sToken || !$store){
+                Db::rollBack();
+                throw new \Exception('保存token失败');
+            }
+            Db::commit();
+            #. 这里就需要等待用户进行配置然后触发订单操作
+            return $response->json(['code' => 200,'msg' => 'ok']);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
-//        $result = $this->storeService->ex($request->all());
-        return $response->json(['code' => 200,'msg' => 'ok', 'data' => $token]);
     }
 
     /**
@@ -129,7 +143,7 @@ class IndexController extends AbstractController
                 if (!$link){
                     throw new \Exception('拼接授权地址失败;');
                 }
-                return $response->json(['code' => 200,'msg' => 'link', 'data' => $link]);
+                return $response->json(['code' => 200,'msg' => 'link', 'data' => strval($link)]);
             }
             /**@var Store $store*/
             $data = $this->auth->login($store);
