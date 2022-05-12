@@ -5,24 +5,23 @@ namespace App\Model;
 
 use Qbhy\HyperfAuth\AuthAbility;
 use Qbhy\HyperfAuth\Authenticatable;
-
 /**
- * @property int $id
- * @property string $store_name
- * @property string $toekn
- * @property int $biz_store_status
- * @property string $created_at
- * @property string $currency
- * @property string $customer_email
- * @property string $domain
- * @property string $email
- * @property string $iana_timezone
- * @property string $language
- * @property string $location_country_code
- * @property string $standard_logo
- * @property string $updated_at
- * @property \Carbon\Carbon $create_time
- * @property \Carbon\Carbon $update_time
+ * @property int $id 
+ * @property string $store_name 
+ * @property string $token 
+ * @property int $biz_store_status 
+ * @property string $created_at 
+ * @property string $currency 
+ * @property string $customer_email 
+ * @property string $domain 
+ * @property string $email 
+ * @property string $iana_timezone 
+ * @property string $language 
+ * @property string $location_country_code 
+ * @property string $standard_logo 
+ * @property string $updated_at 
+ * @property \Carbon\Carbon $create_time 
+ * @property \Carbon\Carbon $update_time 
  */
 class Store extends Model implements Authenticatable
 {
