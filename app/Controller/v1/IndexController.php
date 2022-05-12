@@ -112,8 +112,8 @@ class IndexController extends AbstractController
             $token = json_decode($token, true);
             Db::beginTransaction();
             #. 保存token
-            $sToken = Token::insert(['handle' => $params['handle'], 'update_time' => date('Y-m-d H:i:s')]);
-            $store = Store::insert(['store_name' => $params['handle'], 'token' => $token['accessToken'], 'create_time' => date('Y-m-d H:i:s')]);
+            $sToken = Token::insert(['handle' => $params['handle'],'token' => $token['data']['accessToken'], 'update_time' => date('Y-m-d H:i:s')]);
+            $store = Store::insert(['store_name' => $params['handle'], 'token' => $token['data']['accessToken'], 'create_time' => date('Y-m-d H:i:s')]);
             if (!$sToken || !$store){
                 Db::rollBack();
                 throw new \Exception('保存token失败');
