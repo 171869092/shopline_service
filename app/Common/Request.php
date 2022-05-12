@@ -78,12 +78,18 @@ class Request
                     $sign = $this->sign($array['code'],$array['handle'],$array['timestamp'], 'post');
                     echo 'sign = '. $sign. "\r\n";
                     $respone = $client->post($url,[
-                        'form_params' => ['code' => $array['code']],
+                        #'form_params' => ['code' => $array['code']],
+                        'body' => json_encode(['code' => $array['code']]),
+                        #'body' => ['code' => $array['code']],
                         'headers' => [
                             'appkey' => $array['appkey'],
                             'sign' => $sign,
-                            'timestamp' => $array['timestamp']
-                            ]
+                            'timestamp' => $array['timestamp'],
+                            'Content-Type' => 'application/json'
+                            #'Content-Type:application/json;charset=UTF-8'
+                            ],
+                            #'Content-Type:application/json;charset=UTF-8',
+                            #'Content-Type' => 'application/json'
                     ]);
                     echo "req = \r\n";
                     print_r($respone);
