@@ -82,7 +82,8 @@ class Request
                         'headers' => [
                             'appkey' => $array['appkey'],
                             'sign' => $sign,
-                            'timestamp' => $array['timestamp']
+                            'timestamp' => $array['timestamp'],
+                            'Content-Type' => 'application/json'
                             ]
                     ]);
                     echo "req = \r\n";
