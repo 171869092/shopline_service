@@ -14,8 +14,7 @@
     "require": {
         "php": ">=7.3",
         "96qbhy/hyperf-auth": "^2.4.3",
-        "automattic/woocommerce": "^3.0",
-        "aws/aws-sdk-php": "^3.173",
+        "hyperf/amqp": "^2.2",
         "hyperf/cache": "2.2.*",
         "hyperf/command": "2.2.*",
         "hyperf/config": "2.2.*",
@@ -39,11 +38,8 @@
         "hyperf/snowflake": "^2.2",
         "hyperf/socketio-server": "^2.2",
         "league/flysystem-aws-s3-v3": "^2.1",
-        "overtrue/wechat": "^5.22",
-        "paypal/rest-api-sdk-php": "*",
-        "phpclassic/php-shopify": "^1.1",
-        "yurunsoft/phpmailer-swoole": "~1.0",
-        "yurunsoft/guzzle-swoole": "^2.2"
+        "yurunsoft/guzzle-swoole": "^2.2",
+        "yurunsoft/phpmailer-swoole": "~1.0"
     },
     "require-dev": {
         "swoole/ide-helper": "^4.5",

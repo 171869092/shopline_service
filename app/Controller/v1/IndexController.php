@@ -14,6 +14,7 @@ use App\Common\Request;
 use App\Constants\ErrorCode;
 use App\Model\Store;
 use App\Model\Token;
+use App\Service\Order\OrderService;
 use App\Service\Store\StoreService;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\DbConnection\Db;
@@ -57,6 +58,12 @@ class IndexController extends AbstractController
      * @var Request
      */
     protected $resServer;
+
+    /**
+     * @Inject
+     * @var OrderService
+     */
+    protected $orderServer;
 
     /**
      * install
@@ -120,7 +127,8 @@ class IndexController extends AbstractController
             }
             Db::commit();
             #. 这里就需要等待用户进行配置然后触发订单操作
-            return $response->json(['code' => 200,'msg' => 'ok']);
+            $push = $this->orderServer->pushQueue(['handle' => $params['handle'], 'token' => $token['data']['accessToken']]);
+            return $response->json(['code' => 200,'msg' => 'ok', 'v' => $push]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
