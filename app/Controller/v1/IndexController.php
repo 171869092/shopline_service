@@ -143,7 +143,7 @@ class IndexController extends AbstractController
                 if (!$link){
                     throw new \Exception('拼接授权地址失败;');
                 }
-                return $response->json(['code' => 200,'msg' => 'link', 'data' => strval($link)]);
+                return $response->json(['code' => 200,'msg' => 'link', 'data' => str_replace('\\','',$link)]);
             }
             /**@var Store $store*/
             $data = $this->auth->login($store);
