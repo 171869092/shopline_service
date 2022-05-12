@@ -93,8 +93,6 @@ class Request
                             'Content-Type' => 'application/json'
                             ],
                     ]);
-                    echo "req = \r\n";
-                    print_r($respone);
                     return [
                         'coroutine_id' => Coroutine::id(),
                         'code' => $respone->getStatusCode(),
@@ -104,7 +102,7 @@ class Request
                 }
             ]);
             print_r($result);
-            return $result['body'][0]['body'] ?? '';
+            return $result[0]['body'] ?? '';
         }catch (\Exception $e){
             throw new \Exception($e->getMessage());
         }catch (\Throwable $e){
