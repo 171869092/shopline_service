@@ -29,8 +29,10 @@ class OrderService
         return true;
     }
 
-    public function getShoplineOrder() :bool
+    public function getShoplineOrder(string $handle) :bool
     {
+        $url = 'https://'. $handle .'.myshopline.com/admin/openapi/v20210901/orders.json';
+
         return true;
     }
 

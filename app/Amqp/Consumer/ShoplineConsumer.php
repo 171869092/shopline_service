@@ -10,16 +10,22 @@ use Hyperf\Amqp\Message\ConsumerMessage;
 use PhpAmqpLib\Message\AMQPMessage;
 
 /**
- * @Consumer(exchange="hyperf", routingKey="hyperf", queue="hyperf", name="ShoplineConsumer", nums=1)
+ * @Consumer(exchange="hyperf", routingKey="hyperf", queue="hyperf", name="ShoplineConsumer", nums=1, enable=false)
  */
 #[Consumer(exchange: 'hyperf', routingKey: 'hyperf', queue: 'hyperf', name: "ShoplineConsumer", nums: 1)]
 class ShoplineConsumer extends ConsumerMessage
 {
     public function consumeMessage($data, AMQPMessage $message): string
     {
+
         echo "\r\n consume = ";
         print_r($data);
         echo "\r\n";
         return Result::ACK;
+    }
+
+    public function isEnable(): bool
+    {
+        return parent::isEnable();
     }
 }

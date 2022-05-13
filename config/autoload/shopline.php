@@ -2,8 +2,8 @@
 
 return [
     'dev' => [
-        'app_key' => 'bc9b11120a153ac78bcca0699be0cadbaaabe033',
-        'app_secret' => 'ac4b472fc24a9569177f734d7efe22239a4f4332'
+        'app_key' => 'e987564c856c078b44f976227ea119dd3c790979',
+        'app_secret' => '29d6861a3d45c776d9778076cb19db163dd4f0a1'
     ],
     'url' => 'myshopline.com',
     'version' => 'v20210901',

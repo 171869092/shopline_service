@@ -41,6 +41,8 @@ class OrderController extends AbstractController
     public function notify(RequestInterface $request, ResponseInterface $response)
     {
         try {
+            echo "hook = \r\n";
+            print_r($request->post());
             return $response->json(['code' => 200, 'msg' => 'ok']);
         }catch (\Exception $e){
             return $response->json(['code' => 200, 'msg' => $e->getMessage()]);

@@ -109,4 +109,30 @@ class Request
             print_r($e->getMessage());
         }
     }
+
+    public function orderWebhook(string $url) :array
+    {
+        parallel([
+            function () use($url){
+                $client = new Client([
+                    'base_uri' => $url,
+                    'handler' => HandlerStack::create(new CoroutineHandler()),
+                    'timeout' => 5,
+                    'swoole' => [
+                        'timeout' => 10,
+                        'socket_buffer_size' => 1024 * 1024 * 2
+                    ]
+                ]);
+                $respone = $client->post($url,[
+                    'body' => json_encode(['code' => $array['code']]),
+                    'headers' => [
+                        'appkey' => $array['appkey'],
+                        'sign' => $sign,
+                        'timestamp' => $array['timestamp'],
+                        'Content-Type' => 'application/json'
+                    ],
+                ]);
+            }
+        ]);
+    }
 }
