@@ -67,7 +67,7 @@ class OrderService
             'note' => $array['note'] ?? '',
             'order_at' => $array['order_at'],
             'payment_details' => json_encode($array['payment_details']),
-            'payment_gateway_names' => $array['payment_gateway_names'],
+            'payment_gateway_names' => isset($array['payment_gateway_names']) ? json_encode($array['payment_gateway_names']) : '',
             'phone' => $array['phone'],
             'shipping_address' => json_encode($array['shipping_address']),
             'store_id' => $array['store_id'],
