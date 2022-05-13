@@ -11,9 +11,14 @@ use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\Di\Annotation\Inject;
 use App\Controller\v1\AbstractController;
 use Hyperf\Logger\LoggerFactory;
-
+use Qbhy\HyperfAuth\Annotation\Auth;
+use Qbhy\HyperfAuth\AuthManager;
+use Hyperf\HttpServer\Annotation\Middleware;
+use App\Middleware\JwtAuthMiddleware;
+use App\Annotation\NotAuth;
 /**
  * @Controller()
+ * @NotAuth
  * Class OrderController
  * @package App\Controller\v1
  */
