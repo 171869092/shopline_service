@@ -47,7 +47,7 @@ class OrderController extends AbstractController
     {
         try {
             echo "hook = \r\n";
-            print_r($request->post());
+            $this->orderService->pushQueue($request->post());
             return $response->json(['code' => 200, 'msg' => 'ok']);
         }catch (\Exception $e){
             return $response->json(['code' => 200, 'msg' => $e->getMessage()]);
