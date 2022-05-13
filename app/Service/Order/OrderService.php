@@ -48,14 +48,14 @@ class OrderService
         if (!$array){
             return false;
         }
-        $insert = $this->orderModel->insert([
+        $ins = [
             'name' => $array['name'],
             'shopline_id' => $array['id'],
             'client_details' => @json_encode($array['client_details']),
-            'cancel_reason' => $array['cancel_reason'],
+            'cancel_reason' => $array['cancel_reason'] ?? '',
             'browser_ip' => $array['browser_ip'],
             'billing_address' => json_encode($array['billing_address']),
-            'cancelled_at' => $array['cancelled_at'],
+            'cancelled_at' => $array['cancelled_at'] ?? '',
             'currency' => $array['currency'],
             'current_total_price' => $array['current_total_price'],
             'current_total_tax' => $array['current_total_tax'],
@@ -64,7 +64,7 @@ class OrderService
             'email' => $array['email'],
             'financial_status' => $array['financial_status'],
             'fulfillment_status' => $array['fulfillment_status'],
-            'note' => $array['note'],
+            'note' => $array['note'] ?? '',
             'order_at' => $array['order_at'],
             'payment_details' => json_encode($array['payment_details']),
             'payment_gateway_names' => $array['payment_gateway_names'],
@@ -72,16 +72,17 @@ class OrderService
             'shipping_address' => json_encode($array['shipping_address']),
             'store_id' => $array['store_id'],
             'subtotal_price' => $array['subtotal_price'],
-            'tags' => $array['tags'],
-            'tax_lines' => json_encode($array['tax_lines']),
-            'tax_number' => $array['tax_number'],
-            'tax_type' => $array['tax_type'],
+            'tags' => $array['tags'] ?? '',
+            'tax_lines' => isset($array['tax_lines']) ? json_encode($array['tax_lines']) : '',
+            'tax_number' => $array['tax_number'] ?? '',
+            'tax_type' => $array['tax_type'] ?? '',
             'total_tax' => $array['total_tax'],
             'total_tip_received' => $array['total_tip_received'],
             'total_weight' => $array['total_weight'],
             'updated_at' => $array['updated_at'],
             'create_time' => date('Y-m-d H:i:s')
-        ]);
+        ];
+        $insert = $this->orderModel->insert($ins);
         if (!$insert){
             throw new \Exception('添加webhook失败');
         }
