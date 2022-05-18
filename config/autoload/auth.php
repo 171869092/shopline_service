@@ -167,24 +167,6 @@ return [
              */
             'prefix' => env('SIMPLE_JWT_PREFIX', 'default'),
         ],
-        'jwt-admin' => [
-            'driver' => Qbhy\HyperfAuth\Guard\JwtGuard::class,
-            'provider' => 'admin',
-            'secret' => env('SIMPLE_JWT_SECRET'),
-            'header_name' => env('JWT_HEADER_NAME', 'Authorization'),
-            'ttl' => 60 * 60 * 24 * 365 * 100,
-            'refresh_ttl' => (int) env('SIMPLE_JWT_REFRESH_TTL', 60 * 60 * 24 * 7),
-            'default' => Encrypter\PasswordHashEncrypter::class,
-            'drivers' => [
-                Encrypter\PasswordHashEncrypter::alg() => Encrypter\PasswordHashEncrypter::class,
-                Encrypter\CryptEncrypter::alg() => Encrypter\CryptEncrypter::class,
-                Encrypter\SHA1Encrypter::alg() => Encrypter\SHA1Encrypter::class,
-                Encrypter\Md5Encrypter::alg() => Encrypter\Md5Encrypter::class,
-            ],
-            'encoder' => new Encoders\Base64UrlSafeEncoder(),
-            'cache' => new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir()),
-            'prefix' => env('SIMPLE_JWT_PREFIX', 'default'),
-        ],
         'session' => [
             'driver' => Qbhy\HyperfAuth\Guard\SessionGuard::class,
             'provider' => 'users',

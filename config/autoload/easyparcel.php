@@ -2,17 +2,17 @@
 
 return [
     'dev' => [
-        'api_key' => 'EP-BiToxzFlH',
-        'auth_key' => 'GKNUspRj9K',
+        'api_key' => 'EP-2ckJEYFVf',
+        'auth_key' => 'XSsMotkzD6',
         'country' => 'Singapore',
         'phone' => '6585740736',
-        'uri' => 'https://demo.connect.easyparcel.my/'
+        'uri' => 'http://connect.easyparcel.sg'
     ],
     'prod' => [
-        'api_key' => 'EP-BiToxzFlH',
-        'auth_key' => 'j18kJ6Np9t',
+        'api_key' => 'EP-2ckJEYFVf',
+        'auth_key' => 'XSsMotkzD6',
         'country' => 'Singapore',
         'phone' => '6585740736',
-        'uri' => 'https://connect.easyparcel.my/'
+        'uri' => 'http://connect.easyparcel.sg'
     ]
 ];

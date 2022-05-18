@@ -66,6 +66,7 @@ class OrderService
             'fulfillment_status' => $array['fulfillment_status'],
             'note' => $array['note'] ?? '',
             'order_at' => $array['order_at'],
+            'line_item' => $array['line_item'],
             'payment_details' => json_encode($array['payment_details']),
             'payment_gateway_names' => isset($array['payment_gateway_names']) ? json_encode($array['payment_gateway_names']) : '',
             'phone' => $array['phone'],
@@ -88,6 +89,7 @@ class OrderService
         if (!$insert){
             throw new \Exception('添加webhook失败');
         }
-        return $this->producer->produce(new ShoplineProducer($array));
+        #. 此处将产品信息push到 amqp 等待推送到 easyparcel
+        return $this->producer->produce(new ShoplineProducer($ins));
     }
 }

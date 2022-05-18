@@ -14,6 +14,7 @@ use App\Common\Request;
 use App\Constants\ErrorCode;
 use App\Model\Store;
 use App\Model\Token;
+use App\Service\EasyParcel\EasyParcelService;
 use App\Service\Order\OrderService;
 use App\Service\Store\StoreService;
 use Hyperf\Contract\ConfigInterface;
@@ -159,5 +160,14 @@ class IndexController extends AbstractController
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * @RequestMapping(path="live", methods="get")
+     */
+    public function testLive(RequestInterface $request, ResponseInterface $response)
+    {
+        $data = (new EasyParcelService())->mPSubmitOrderBulk();
+        return $response->json(['code' => 200,'msg' => 'ok', 'data' => $data]);
     }
 }
