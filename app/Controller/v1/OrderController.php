@@ -103,7 +103,7 @@ class OrderController extends AbstractController
                 throw new \Exception('参数错误');
             }
             $result = $this->easyParcel->testConnect($post['api'], $post['auth_key']);
-            return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
+            return $response->json(['code' => 200,'msg' => '连接成功', 'data' => $result]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
