@@ -4,6 +4,7 @@ namespace App\Controller\v1;
 use App\Constants\ErrorCode;
 use App\Service\EasyParcel\EasyParcelService;
 use App\Service\Order\OrderService;
+use App\Service\Store\StoreService;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\HttpServer\Annotation\RequestMapping;
@@ -43,6 +44,12 @@ class OrderController extends AbstractController
      * @var EasyParcelService
      */
     protected $easyParcel;
+
+    /**
+     * @Inject()
+     * @var StoreService
+     */
+    protected $store;
 
     /**
      * 订单通知回调
@@ -121,6 +128,24 @@ class OrderController extends AbstractController
         try {
             $result = $this->easyParcel->getServiceList();
             return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * 保存配置
+     * @RequestMapping(path="save", methods="post")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function saveStore(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            $params = $request->post();
+            $this->store->saveStore($params);
+            return $response->json(['code' => 200,'msg' => 'ok']);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
