@@ -198,7 +198,7 @@ class EasyParcelService
      */
     public function  getConfig(string $handle) :array
     {
-        $store = $this->storeModel->where(['handle' => $handle])->select(['id','easy_api','easy_auth_key','easy_service_id'])->first();
+        $store = $this->storeModel->where(['store_name' => $handle])->select(['id','easy_api','easy_auth_key','easy_service_id'])->first();
         $serviceList = $this->serviceModel->get();
         return ['data' => $store->toArray(), 'service' => $serviceList->toArray()];
     }
