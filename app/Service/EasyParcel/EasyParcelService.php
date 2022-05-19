@@ -1,5 +1,6 @@
 <?php
 namespace App\Service\EasyParcel;
+use App\Model\EasyWebhook;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Hyperf\Config\Annotation\Value;
@@ -116,6 +117,11 @@ class EasyParcelService
      */
     public function webhook(array $array) :bool
     {
-        
+        EasyWebhook::insert([
+            'topic' => 'shipment/create',
+            'create_time' => date('Y-m-d H:i:s'),
+            'payload' => json_encode($array)
+        ]);
+        return true;
     }
 }
