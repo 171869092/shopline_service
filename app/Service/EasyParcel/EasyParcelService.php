@@ -163,7 +163,7 @@ class EasyParcelService
             ]
         ];
         $uri = 'connect.easyparcel.sg';
-        $path = '?ac=MPRateCheckingBulk';
+        $path = '/?ac=MPRateCheckingBulk';
         $client = new Client([
             'base_uri' => $uri,
             'handler' => HandlerStack::create(new CoroutineHandler()),
