@@ -107,4 +107,15 @@ class EasyParcelService
         }
         return $result;
     }
+
+    /**
+     * 处理easyParcel的webhook数据
+     * 将数据先落地一份，在回传到shopline
+     * @param array $array
+     * @return bool
+     */
+    public function webhook(array $array) :bool
+    {
+        
+    }
 }

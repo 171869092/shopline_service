@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Controller\v1;
 use App\Constants\ErrorCode;
+use App\Service\EasyParcel\EasyParcelService;
 use App\Service\Order\OrderService;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
@@ -38,6 +39,12 @@ class OrderController extends AbstractController
     protected $orderService;
 
     /**
+     * @Inject()
+     * @var EasyParcelService
+     */
+    protected $easyParcel;
+
+    /**
      * 订单通知回调
      * @RequestMapping(path="notify", methods="post")
      * @param RequestInterface $request
@@ -59,24 +66,24 @@ class OrderController extends AbstractController
     }
 
     /**
-     * 下单
+     * easyParcel webhook
+     * shipment/create
+     * @RequestMapping(path="hook", methods="post")
      * @param RequestInterface $request
      * @param ResponseInterface $response
-     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function unify(RequestInterface $request, ResponseInterface $response)
+    public function easyParcel(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            if (!$params = $request->post()){
-                throw new \Exception('参数错误');
-            }
-            if (!isset($params['user_id']) && empty($params['user_id'])){
-                throw new \Exception('用户id错误');
-            }
-            $result = $this->orderService->unifyOrder($params);
-            return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $result]);
+            echo "easy hook = \r\n";
+            $this->easyParcel->webhook($request->post());
+            return $response->json(['code' => 200, 'msg' => 'ok']);
         }catch (\Exception $e){
-            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+            return $response->json(['code' => 200, 'msg' => $e->getMessage()]);
+        }catch (\Throwable $e){
+            //. 这里的需要记录日志
+            $this->logger->get('easy_parcel_callback_error','easy_parcel_callback_error')
+                ->error($e->getMessage());
         }
     }
 }

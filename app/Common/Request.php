@@ -51,12 +51,13 @@ class Request
 
     /**
      * 拼接授权请求地址
+     * $redirectUri = 'https://sh.tquuqu.com/v1/index/call'
      * @param string $handle
      * @param string $scope
      * @param string $redirectUri
      * @return string
      */
-    public function oauth(string $handle, string $scope = 'read_orders,write_orders', string $redirectUri = 'https://sh.tquuqu.com/v1/index/call') :string
+    public function oauth(string $handle, string $scope = 'read_orders,write_orders', string $redirectUri = 'https://v.tquuqu.com') :string
     {
         return 'https://'. $handle .'.myshopline.com/admin/oauth-web/#/oauth/authorize?appKey='.$this->appKey.'&responseType=code&scope='.$scope.'&redirectUri='.$redirectUri;
     }

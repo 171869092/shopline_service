@@ -68,17 +68,22 @@ class IndexController extends AbstractController
 
     /**
      * install
-     * @RequestMapping(path="install", methods="get")
+     * @RequestMapping(path="config", methods="get")
      * @param RequestInterface $request
      * @param ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function install(RequestInterface $request, ResponseInterface $response)
+    public function getConfig(RequestInterface $request, ResponseInterface $response)
     {
         try {
             if (!$get = $request->all()){
                 throw new \Exception('Params error');
             }
+            $data = [
+                'are' => [
+                    'my' => ''
+                ]
+            ];
 
             $token = '';
             return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $token]);
@@ -129,7 +134,10 @@ class IndexController extends AbstractController
             Db::commit();
             #. 这里就需要等待用户进行配置然后触发订单操作
             $push = $this->orderServer->pushQueue(['handle' => $params['handle'], 'token' => $token['data']['accessToken']]);
-            return $response->json(['code' => 200,'msg' => 'ok', 'v' => $push]);
+            $sto = Store::query()->where(['store_name' => $params['handle']])->first();
+            /**@var Store $sto*/
+            $data = $this->auth->login($sto);
+            return $response->json(['code' => 200,'msg' => 'ok', 'token' => $data]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
