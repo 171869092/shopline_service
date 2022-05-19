@@ -1,6 +1,8 @@
 <?php
 namespace App\Service\EasyParcel;
 use App\Model\EasyWebhook;
+use App\Model\Service;
+use App\Model\Store;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Hyperf\Config\Annotation\Value;
@@ -24,6 +26,18 @@ class EasyParcelService
      * @Value("easyparcel.dev.uri")
      */
     protected $uri;
+
+    /**
+     * @Inject
+     * @var Store
+     */
+    protected $storeModel;
+
+    /**
+     * @Inject
+     * @var Service
+     */
+    protected $serviceModel;
 
     public function request(string $path, array $params) :array
     {
@@ -123,5 +137,69 @@ class EasyParcelService
             'payload' => json_encode($array)
         ]);
         return true;
+    }
+
+    /**
+     * 测试easyParcel连接
+     * @param string $api
+     * @param string $auth
+     * @return bool
+     */
+    public function testConnect(string $api, string $auth) :bool
+    {
+        $params = [
+            'authentication' => $auth,
+            'api' => $api,
+            'bulk' => [
+                [
+                    'pick_code' => '409015',
+                    'pick_state' => 'sgr',
+                    'pick_country' => 'SG',
+                    'send_code' => '059897',
+                    'send_state' => 'sgr',
+                    'send_country' => 'SG',
+                    'weight' => '14'
+                ]
+            ]
+        ];
+        $uri = 'connect.easyparcel.sg';
+        $path = '?ac=MPRateCheckingBulk';
+        $client = new Client([
+            'base_uri' => $uri,
+            'handler' => HandlerStack::create(new CoroutineHandler()),
+            'timeout' => 5,
+            'swoole' => [
+                'timeout' => 10,
+                'socket_buffer_size' => 1024 * 1024 * 2
+            ]
+        ]);
+        $respone = $client->post($uri.$path, ['body' => json_encode($params)]);
+        $result = $respone->getBody()->getContents();
+        $result = json_decode($result, true);
+        if (isset($result['api_status']) && $result['api_status'] == 'Success'){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 获取easyparcel的service列表
+     * @return array
+     */
+    public function getServiceList() :array
+    {
+        return Service::get()->toArray();
+    }
+
+    /**
+     * 获取配置
+     * @param string $handle
+     * @return array
+     */
+    public function  getConfig(string $handle) :array
+    {
+        $store = $this->storeModel->where(['handle' => $handle])->select(['id','easy_api','easy_auth_key','easy_service_id'])->first();
+        $serviceList = $this->serviceModel->get();
+        return ['data' => $store->toArray(), 'service' => $serviceList->toArray()];
     }
 }

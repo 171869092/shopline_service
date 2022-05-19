@@ -67,7 +67,13 @@ class IndexController extends AbstractController
     protected $orderServer;
 
     /**
-     * install
+     * @Inject
+     * @var EasyParcelService
+     */
+    protected $easyParcel;
+
+    /**
+     * 获取配置项
      * @RequestMapping(path="config", methods="get")
      * @param RequestInterface $request
      * @param ResponseInterface $response
@@ -79,14 +85,9 @@ class IndexController extends AbstractController
             if (!$get = $request->all()){
                 throw new \Exception('Params error');
             }
-            $data = [
-                'are' => [
-                    'my' => ''
-                ]
-            ];
+            $result = $this->easyParcel->getConfig($get['handle']);
 
-            $token = '';
-            return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $token]);
+            return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $result['data'],'service' => $result['service']]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }

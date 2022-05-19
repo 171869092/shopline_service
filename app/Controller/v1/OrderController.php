@@ -62,6 +62,7 @@ class OrderController extends AbstractController
             //. 这里的需要记录日志
             $this->logger->get('order_callback_error','order_callback_error')
                 ->error($e->getMessage());
+            return $response->json(['code' => 200, 'msg' => $e->getMessage()]);
         }
     }
 
@@ -84,6 +85,44 @@ class OrderController extends AbstractController
             //. 这里的需要记录日志
             $this->logger->get('easy_parcel_callback_error','easy_parcel_callback_error')
                 ->error($e->getMessage());
+            return $response->json(['code' => 200, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Test Connect
+     * @RequestMapping(path="connect", methods="post")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     */
+    public function checkConnect(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            $post = $request->post();
+            if (!$post){
+                throw new \Exception('参数错误');
+            }
+            $result = $this->easyParcel->testConnect($post['api'], $post['auth_key']);
+            return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * 获取easyparcel service
+     * @RequestMapping(path="get_service", methods="get")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function getService(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            $result = $this->easyParcel->getServiceList();
+            return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
     }
 }
