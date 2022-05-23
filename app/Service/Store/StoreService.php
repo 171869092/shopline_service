@@ -34,9 +34,15 @@ class StoreService{
         $store->easy_api = $params['easy_api'];
         $store->easy_auth_key = $params['easy_auth_key'];
         $store->easy_service_id = $params['easy_service_id'];
+        $store->update_time = date('Y-m-d H:i:s');
         if (!$store->save()){
             throw new \Exception('保存失败');
         }
         return true;
+    }
+
+    public function pushShopline() :bool
+    {
+
     }
 }
