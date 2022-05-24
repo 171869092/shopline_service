@@ -167,7 +167,7 @@ class OrderController extends AbstractController
             if (!$params['handle']){
                 throw new \Exception('handle错误');
             }
-            $result = $this->easyParcel->getPushLog($params['handle'], $params['limit'], $params['page']);
+            $result = $this->easyParcel->getPushLog((string)$params['handle'], (int)$params['limit'], (int)$params['page']);
             return $response->json(['code' => 200,'msg' => 'ok', 'count' => $result['count'], 'data' => $result['data']]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
