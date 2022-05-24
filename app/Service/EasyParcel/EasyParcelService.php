@@ -224,12 +224,15 @@ class EasyParcelService
     public function getPushLog(string $handle, int $limit = 10, int $page = 0) :array
     {
         $model = OrderPush::query();
-        $count = $model->where(['handle' => $handle])->count();
+        $newModel = clone $model;
+        $count = $newModel->where(['handle' => $handle])->count();
         $data = $model
             ->where(['handle' => $handle])
-            ->limit($limit)->offset($page)
+            ->limit($limit)
+            ->offset($page)
             ->orderBy('id','desc')
-            ->get()->toArray();
+            ->get()
+            ->toArray();
         return ['count' => $count, 'data' => $data];
     }
 }

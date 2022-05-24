@@ -134,7 +134,7 @@ class IndexController extends AbstractController
             }
             Db::commit();
             #. 这里就需要等待用户进行配置然后触发订单操作
-            $push = $this->orderServer->pushQueue(['handle' => $params['handle'], 'token' => $token['data']['accessToken']]);
+//            $push = $this->orderServer->pushQueue(['handle' => $params['handle'], 'token' => $token['data']['accessToken']]);
             $sto = Store::query()->where(['store_name' => $params['handle']])->first();
             /**@var Store $sto*/
             $data = $this->auth->login($sto);
