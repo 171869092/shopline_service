@@ -124,6 +124,11 @@ class IndexController extends AbstractController
                 ]);
             if (!$token) throw new \Exception('获取token失败,请联系开发人员');
             $token = json_decode($token, true);
+
+            #. 获取店铺信息
+            $resStore = $this->resServer->requestStore($uri, $url,$token['data']['accessToken']);
+            echo "\r\n resStore = \r\n";
+            print_r($resStore);
             Db::beginTransaction();
             #. 保存token
             $sToken = Token::insert(['handle' => $params['handle'],'token' => $token['data']['accessToken'],'expire_time' =>$token['data']['expireTime'], 'scope' => $token['data']['scope'], 'update_time' => date('Y-m-d H:i:s')]);
@@ -176,7 +181,14 @@ class IndexController extends AbstractController
      */
     public function testLive(RequestInterface $request, ResponseInterface $response)
     {
-        $data = (new EasyParcelService())->mPSubmitOrderBulk();
+//        $data = (new EasyParcelService())->mPSubmitOrderBulk();
+        $uri = 'https://lives-will.myshopline.com/';
+        $url = 'admin/openapi/v20210901/merchants/shop.json';
+        $token = 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxsZXJJZCI6IjIwMDA5Nzk2ODYiLCJkb21haW4iOiJodHRwczovL3NsLW9wZW4tdXMubXlzaG9wbGluZS5jb20iLCJpc3MiOiJ5c291bCIsImFwcEtleSI6ImU5ODc1NjRjODU2YzA3OGI0NGY5NzYyMjdlYTExOWRkM2M3OTA5NzkiLCJzdG9yZUlkIjoiMTY1MjE4NzA5NjgxMCIsImV4cCI6MTY1MzQyMzEwOCwidmVyc2lvbiI6IlYyIiwidGltZXN0YW1wIjoxNjUzMzg3MTA4MDI4fQ.R8dV9_8sXIfNi11HPoPaAtVncdVyX9aedCP6HcexRLT9AP5zY2CdTFXEInaDROeZACks66VSm36SES9TbdatWQ';
+        #. 获取店铺信息
+        $data = $this->resServer->requestStore($uri, $url,$token);
+        echo "\r\n resStore = \r\n";
+        print_r($data);
         return $response->json(['code' => 200,'msg' => 'ok', 'data' => $data]);
     }
 }

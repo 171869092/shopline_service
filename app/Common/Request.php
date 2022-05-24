@@ -7,6 +7,7 @@ use Hyperf\Config\Annotation\Value;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Guzzle\CoroutineHandler;
 use Hyperf\Utils\Coroutine;
+use function Swoole\Coroutine\Http\post;
 
 class Request
 {
@@ -57,7 +58,7 @@ class Request
      * @param string $redirectUri
      * @return string
      */
-    public function oauth(string $handle, string $scope = 'read_orders,write_orders', string $redirectUri = 'https://v.tquuqu.com') :string
+    public function oauth(string $handle, string $scope = 'read_orders,write_orders,read_customers,read_inventory,write_inventory,read_metafileds,write_metafileds,read_products,read_store_information,read_themes', string $redirectUri = 'https://v.tquuqu.com') :string
     {
         return 'https://'. $handle .'.myshopline.com/admin/oauth-web/#/oauth/authorize?appKey='.$this->appKey.'&responseType=code&scope='.$scope.'&redirectUri='.$redirectUri;
     }
@@ -109,6 +110,46 @@ class Request
         }catch (\Throwable $e){
             print_r($e->getMessage());
         }
+    }
+
+    /**
+     * @param string $uri
+     * @param string $url
+     * @param string $token
+     * @throws \Exception
+     */
+    public function requestStore(string $uri,string $url, string $token)
+    {
+        try {
+            $result = parallel([
+                function () use($uri, $url, $token) {
+                    $client = new Client([
+                        'base_uri' => $uri,
+                        'handler' => HandlerStack::create(new CoroutineHandler()),
+                        'timeout' => 5,
+                        'swoole' => [
+                            'timeout' => 10,
+                            'socket_buffer_size' => 1024 * 1024 * 2
+                        ]
+                    ]);
+                    $respone = $client->get($url,[
+                        'headers' => [
+                            'Authorization' => 'Bearer ' .$token,
+//                            'Content-Type' => 'application/json'
+                        ],
+                    ]);
+                    return [
+                        'coroutine_id' => Coroutine::id(),
+                        'code' => $respone->getStatusCode(),
+                        'body' => $respone->getBody()->getContents(),
+                        'content' => $respone->getReasonPhrase()
+                    ];
+                }
+            ]);
+        }catch (\Exception $e){
+            throw new \Exception($e->getMessage());
+        }
+        return json_decode($result[0]['body'], true) ?? [];
     }
 
     /**

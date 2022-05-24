@@ -7,6 +7,7 @@ use Qbhy\HyperfAuth\AuthAbility;
 use Qbhy\HyperfAuth\Authenticatable;
 /**
  * @property int $id 
+ * @property string $shopline_id 
  * @property string $store_name 
  * @property string $token 
  * @property int $biz_store_status 
@@ -22,6 +23,9 @@ use Qbhy\HyperfAuth\Authenticatable;
  * @property string $updated_at 
  * @property \Carbon\Carbon $create_time 
  * @property \Carbon\Carbon $update_time 
+ * @property string $easy_api 
+ * @property string $easy_auth_key 
+ * @property string $easy_service_id 
  */
 class Store extends Model implements Authenticatable
 {
