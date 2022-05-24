@@ -2,6 +2,7 @@
 namespace App\Service\EasyParcel;
 use App\Amqp\Producer\ShoplineLogProducer;
 use App\Model\EasyWebhook;
+use App\Model\OrderPush;
 use App\Model\Service;
 use App\Model\Store;
 use GuzzleHttp\Client;
@@ -211,5 +212,24 @@ class EasyParcelService
         $store = $this->storeModel->where(['store_name' => $handle])->select(['id','easy_api','easy_auth_key','easy_service_id'])->first();
         $serviceList = $this->serviceModel->get();
         return ['data' => $store->toArray(), 'service' => $serviceList->toArray()];
+    }
+
+    /**
+     * 推送记录列表
+     * @param string $handle
+     * @param int $limit
+     * @param int $size
+     * @return array
+     */
+    public function getPushLog(string $handle, int $limit = 10, int $page = 0) :array
+    {
+        $model = OrderPush::query();
+        $count = $model->where(['handle' => $handle])->count();
+        $data = $model
+            ->where(['handle' => $handle])
+            ->limit($limit)->offset($page)
+            ->orderBy('id','desc')
+            ->get()->toArray();
+        return ['count' => $count, 'data' => $data];
     }
 }

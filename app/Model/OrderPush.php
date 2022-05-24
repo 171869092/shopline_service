@@ -6,6 +6,7 @@ namespace App\Model;
 /**
  * @property int $id 
  * @property string $order_id 
+ * @property string $handle 
  * @property string $msg 
  * @property string $push_time 
  * @property int $type 

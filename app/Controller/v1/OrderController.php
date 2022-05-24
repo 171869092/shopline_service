@@ -150,4 +150,27 @@ class OrderController extends AbstractController
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
     }
+
+    /**
+     * 推送列表
+     * @RequestMapping(path="push_list", methods="get")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function pushList(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            if (!$params = $request->all()){
+                throw new \Exception('参数错误');
+            }
+            if (!$params['handle']){
+                throw new \Exception('handle错误');
+            }
+            $result = $this->easyParcel->getPushLog($params['handle'], $params['limit'], $params['page']);
+            return $response->json(['code' => 200,'msg' => 'ok', 'count' => $result['count'], 'data' => $result['data']]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
+    }
 }
