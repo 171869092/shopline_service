@@ -223,13 +223,18 @@ class EasyParcelService
      */
     public function getPushLog(string $handle, int $limit = 10, int $page = 0) :array
     {
-        $model = OrderPush::query();
+        $model = (new OrderPush)::query();
+        $model->where(['handle' => $handle]);
         $newModel = clone $model;
-        $count = $newModel->where(['handle' => $handle])->count();
+        $count = $newModel->count();
+        if (!$count)
+        {
+            return ['count' => 0, 'data' => []];
+        }
+        echo "\r\n page = {$page} \r\n";
         $data = $model
-            ->where(['handle' => $handle])
-            ->limit($limit)
             ->offset($page)
+            ->limit($limit)
             ->orderBy('id','desc')
             ->get()
             ->toArray();
