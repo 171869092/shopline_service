@@ -1,10 +1,12 @@
 <?php
 namespace App\Service\EasyParcel;
+use App\Amqp\Producer\ShoplineLogProducer;
 use App\Model\EasyWebhook;
 use App\Model\Service;
 use App\Model\Store;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
+use Hyperf\Amqp\Producer;
 use Hyperf\Config\Annotation\Value;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Guzzle\CoroutineHandler;
@@ -38,6 +40,12 @@ class EasyParcelService
      * @var Service
      */
     protected $serviceModel;
+
+    /**
+     * @Inject
+     * @var Producer
+     */
+    protected $producer;
 
     public function request(string $path, array $params) :array
     {
@@ -136,6 +144,8 @@ class EasyParcelService
             'create_time' => date('Y-m-d H:i:s'),
             'payload' => json_encode($array)
         ]);
+        #. 这里应该是往shopline推送运单号
+        $this->producer->produce(new ShoplineLogProducer($array));
         return true;
     }
 
@@ -162,7 +172,7 @@ class EasyParcelService
                 ]
             ]
         ];
-        $uri = 'connect.easyparcel.sg';
+        $uri = 'http://connect.easyparcel.sg';
         $path = '/?ac=MPRateCheckingBulk';
         $client = new Client([
             'base_uri' => $uri,

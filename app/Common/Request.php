@@ -111,29 +111,60 @@ class Request
         }
     }
 
-    public function orderWebhook(string $url) :array
+    /**
+     * 将运单号推送到shopline
+     * @param string $uri
+     * @param string $path
+     * @param array $array
+     * @param string $token
+     * @return bool
+     * @throws \Exception
+     */
+    public function fulfillment(string $uri, string $path, array $array, string $token) :bool
     {
-        parallel([
-            function () use($url){
-                $client = new Client([
-                    'base_uri' => $url,
-                    'handler' => HandlerStack::create(new CoroutineHandler()),
-                    'timeout' => 5,
-                    'swoole' => [
-                        'timeout' => 10,
-                        'socket_buffer_size' => 1024 * 1024 * 2
-                    ]
-                ]);
-                $respone = $client->post($url,[
-                    'body' => json_encode(['code' => $array['code']]),
-                    'headers' => [
-                        'appkey' => $array['appkey'],
-                        'sign' => $sign,
-                        'timestamp' => $array['timestamp'],
-                        'Content-Type' => 'application/json'
-                    ],
-                ]);
+        try {
+            $result = parallel([
+                function () use($uri, $path,$array,$token){
+                    $client = new Client([
+                        'base_uri' => $uri,
+                        'handler' => HandlerStack::create(new CoroutineHandler()),
+                        'timeout' => 5,
+                        'swoole' => [
+                            'timeout' => 10,
+                            'socket_buffer_size' => 1024 * 1024 * 2
+                        ]
+                    ]);
+                    $respone = $client->post($path,[
+                        'body' => json_encode([
+                            'fulfillment' => [
+                                'tracking_info' => [
+                                    'company' => $array['company'],
+                                    'number' => $array['number'],
+                                    'url' => $array['url']
+                                ]
+                            ]
+                        ]),
+                        'headers' => [
+                            'Authorization' => $token,
+                            'Content-Type' => 'application/json'
+                        ],
+                    ]);
+                    return [
+                        'coroutine_id' => Coroutine::id(),
+                        'code' => $respone->getStatusCode(),
+                        'body' => $respone->getBody()->getContents(),
+                        'content' => $respone->getReasonPhrase()
+                    ];
+                }
+            ]);
+            if (!isset($result[0]['body'])){
+                throw new \Exception('请求shopline失败');
             }
-        ]);
+            return true;
+        }catch (\Exception $e){
+            throw new \Exception($e->getMessage());
+        }catch (\Throwable $e){
+            throw new \Exception($e->getMessage());
+        }
     }
 }
