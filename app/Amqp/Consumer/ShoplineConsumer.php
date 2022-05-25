@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Amqp\Consumer;
 
 use App\Model\OrderPush;
+use App\Model\Store;
 use App\Service\EasyParcel\EasyParcelService;
 use Hyperf\Amqp\Result;
 use Hyperf\Amqp\Annotation\Consumer;
@@ -61,9 +62,11 @@ echo "\r\n ~~ 推送成功了 ~~ \r\n";
                 $type = -1;
 echo "\r\n ~~ 推送失败了 ~~ \r\n";
             }
+            $store = Store::where(['shopline_id' => $data['store_id']])->first();
             OrderPush::insert([
                 'order_id' => $data['shopline_id'],
                 'msg' => $msg,
+                'handle' => $store->store_name,
                 'push_time' => date('Y-m-d H:i:s'),
                 'type' => $type,
                 'params' => json_encode($push),
