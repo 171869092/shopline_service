@@ -52,7 +52,7 @@ echo "\r\n ~~ 我进来了 ~~ \r\n";
                 'reference' => $data['shopline_id']
             ];
             $result = (new EasyParcelService())->mPSubmitOrderBulk($push);
-            if (isset($result['api_status']) && $result['api_status'] == 'Success'){
+            if ((isset($result['api_status']) && $result['api_status'] == 'Success') && $result['result'][0]['status'] != 'fail'){
 echo "\r\n ~~ 推送成功了 ~~ \r\n";
                 $msg = '推送成功';
                 $type = 1;
