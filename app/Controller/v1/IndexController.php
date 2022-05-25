@@ -126,7 +126,8 @@ class IndexController extends AbstractController
             $token = json_decode($token, true);
 
             #. 获取店铺信息
-            $resStore = $this->resServer->requestStore($uri, $url,$token['data']['accessToken']);
+            $storeUrl = '/admin/openapi/v20210901/merchants/shop.json';
+            $resStore = $this->resServer->requestStore($uri, $storeUrl,$token['data']['accessToken']);
             echo "\r\n resStore = \r\n";
             if (!$resStore){
                 throw new \Exception('获取店铺信息失败');
