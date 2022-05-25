@@ -128,11 +128,26 @@ class IndexController extends AbstractController
             #. 获取店铺信息
             $resStore = $this->resServer->requestStore($uri, $url,$token['data']['accessToken']);
             echo "\r\n resStore = \r\n";
+            if (!$resStore){
+                throw new \Exception('获取店铺信息失败');
+            }
             print_r($resStore);
+            $resStore = json_decode($resStore, true);
             Db::beginTransaction();
             #. 保存token
             $sToken = Token::insert(['handle' => $params['handle'],'token' => $token['data']['accessToken'],'expire_time' =>$token['data']['expireTime'], 'scope' => $token['data']['scope'], 'update_time' => date('Y-m-d H:i:s')]);
-            $store = Store::insert(['store_name' => $params['handle'], 'token' => $token['data']['accessToken'], 'create_time' => date('Y-m-d H:i:s')]);
+            $store = Store::insert([
+                'shopline_id' => $resStore['data']['id'],
+                'biz_store_status' => $resStore['data']['biz_store_status'],
+                'store_name' => $params['handle'],
+                'language' => $resStore['data']['language'],
+                'currency' => $resStore['data']['currency'],
+                'domain' => $resStore['data']['domain'],
+                'customer_email' => $resStore['data']['customer_email'],
+                'created_at' => $resStore['data']['created_at'],
+                'token' => $token['data']['accessToken'],
+                'create_time' => date('Y-m-d H:i:s')
+            ]);
             if (!$sToken || !$store){
                 Db::rollBack();
                 throw new \Exception('保存token失败');
@@ -184,7 +199,7 @@ class IndexController extends AbstractController
 //        $data = (new EasyParcelService())->mPSubmitOrderBulk();
         $uri = 'https://lives-will.myshopline.com/';
         $url = 'admin/openapi/v20210901/merchants/shop.json';
-        $token = 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxsZXJJZCI6IjIwMDA5Nzk2ODYiLCJkb21haW4iOiJodHRwczovL3NsLW9wZW4tdXMubXlzaG9wbGluZS5jb20iLCJpc3MiOiJ5c291bCIsImFwcEtleSI6ImU5ODc1NjRjODU2YzA3OGI0NGY5NzYyMjdlYTExOWRkM2M3OTA5NzkiLCJzdG9yZUlkIjoiMTY1MjE4NzA5NjgxMCIsImV4cCI6MTY1MzQyMzEwOCwidmVyc2lvbiI6IlYyIiwidGltZXN0YW1wIjoxNjUzMzg3MTA4MDI4fQ.R8dV9_8sXIfNi11HPoPaAtVncdVyX9aedCP6HcexRLT9AP5zY2CdTFXEInaDROeZACks66VSm36SES9TbdatWQ';
+        $token = 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxsZXJJZCI6IjIwMDA5Nzk2ODYiLCJkb21haW4iOiJodHRwczovL3NsLW9wZW4tdXMubXlzaG9wbGluZS5jb20iLCJpc3MiOiJ5c291bCIsImFwcEtleSI6ImU5ODc1NjRjODU2YzA3OGI0NGY5NzYyMjdlYTExOWRkM2M3OTA5NzkiLCJzdG9yZUlkIjoiMTY1MjE4NzA5NjgxMCIsImV4cCI6MTY1MzQ4MzI1MywidmVyc2lvbiI6IlYyIiwidGltZXN0YW1wIjoxNjUzNDQ3MjUzMTYxfQ.74ym_b7F_PgtBwe6ZPbyZCv5D_8G6MXk8wI3vxyNyN21GfKDB37vPadDzhBj1NkWAWtb3Q5VJum7d_l6POXh2g';
         #. 获取店铺信息
         $data = $this->resServer->requestStore($uri, $url,$token);
         echo "\r\n resStore = \r\n";
