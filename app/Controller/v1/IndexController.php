@@ -133,7 +133,6 @@ class IndexController extends AbstractController
                 throw new \Exception('获取店铺信息失败');
             }
             print_r($resStore);
-            $resStore = json_decode($resStore, true);
             Db::beginTransaction();
             #. 保存token
             $sToken = Token::insert(['handle' => $params['handle'],'token' => $token['data']['accessToken'],'expire_time' =>$token['data']['expireTime'], 'scope' => $token['data']['scope'], 'update_time' => date('Y-m-d H:i:s')]);
