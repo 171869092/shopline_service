@@ -113,6 +113,9 @@ class IndexController extends AbstractController
             if (!isset($params['handle']) || !isset($params['sign']) || !isset($params['code'])) {
                 throw new \Exception('参数错误,请重新安装');
             }
+            if (Store::where(['store_name' => $params['handle']])->first()){
+                throw new \Exception('已经安装过了');
+            }
             $uri = 'https://'.$params['handle'].'.myshopline.com';
             $url = '/admin/oauth/token/create';
             $token = $this->resServer->authToken($uri, $url, [

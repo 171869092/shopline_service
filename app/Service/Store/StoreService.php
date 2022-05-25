@@ -45,4 +45,18 @@ class StoreService{
     {
 
     }
+
+    /**
+     * 更新店铺信息
+     * @param array $params
+     * @return bool
+     */
+    public function updateStore(array $params, string $handle) :bool
+    {
+        if (!isset($params['update_time'])){
+            $params['update_time'] = date('Y-m-d H:i:s');
+        }
+        $result = $this->storeModel->where(['store_name' => $handle])->update($params);
+        return $result ? true : false;
+    }
 }
