@@ -58,7 +58,7 @@ class Request
      * @param string $redirectUri
      * @return string
      */
-    public function oauth(string $handle, string $scope = 'read_orders,write_orders,read_customers,read_inventory,write_inventory,read_metafileds,write_metafileds,read_products,read_store_information,read_themes', string $redirectUri = 'https://v.tquuqu.com') :string
+    public function oauth(string $handle, string $scope = 'read_orders,write_orders,read_customers,read_inventory,write_inventory,read_metafileds,write_metafileds,read_products,read_store_information,read_themes', string $redirectUri = 'https://v.tquuqu.com/#/dashboard') :string
     {
         return 'https://'. $handle .'.myshopline.com/admin/oauth-web/#/oauth/authorize?appKey='.$this->appKey.'&responseType=code&scope='.$scope.'&redirectUri='.$redirectUri;
     }
