@@ -1,10 +1,14 @@
 <?php
 declare(strict_types=1);
 namespace App\Controller\v1;
+use App\Amqp\Producer\ShoplineProducer;
 use App\Constants\ErrorCode;
+use App\Model\Order;
+use App\Model\Store;
 use App\Service\EasyParcel\EasyParcelService;
 use App\Service\Order\OrderService;
 use App\Service\Store\StoreService;
+use Hyperf\Amqp\Producer;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\HttpServer\Annotation\RequestMapping;
@@ -50,6 +54,12 @@ class OrderController extends AbstractController
      * @var StoreService
      */
     protected $store;
+
+    /**
+     * @Inject
+     * @var Producer
+     */
+    protected $producer;
 
     /**
      * 订单通知回调
@@ -174,6 +184,38 @@ class OrderController extends AbstractController
             }
             $result = $this->easyParcel->getPushLog((string)$params['handle'], (int)$params['limit'], (int)$params['page']);
             return $response->json(['code' => 200,'msg' => 'ok', 'count' => $result['count'], 'data' => $result['data']]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * 重新推送
+     * @RequestMapping(path="re_push", methods="post")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     */
+    public function rePush(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            $result = true;
+            $params = $request->post();
+            if (!isset($params['handle']) && !$params['handle']){
+                throw new \Exception('未找到handle');
+            }
+            $store = Store::where(['handle' => $params['handle']])->first();
+            if (!$store){
+                throw new \Exception('Store Error');
+            }
+            $store->shopline_id;
+            $order = Order::where(['store_id' => $store->shopline_id, 'is_exec' => 1])->get();
+            if (!$order){
+                return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
+            }
+            foreach ($order->toArray() as $v){
+                $this->producer->produce(new ShoplineProducer($v));
+            }
+            return $response->json(['code' => 200,'msg' => 'ok']);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
