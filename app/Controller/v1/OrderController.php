@@ -203,7 +203,7 @@ class OrderController extends AbstractController
             if (!isset($params['handle']) && !$params['handle']){
                 throw new \Exception('未找到handle');
             }
-            $store = Store::where(['handle' => $params['handle']])->first();
+            $store = Store::where(['store_name' => $params['handle']])->first();
             if (!$store){
                 throw new \Exception('Store Error');
             }
