@@ -35,6 +35,7 @@ class StoreService{
         $store->easy_auth_key = $params['easy_auth_key'];
         $store->easy_service_id = $params['easy_service_id'];
         $store->update_time = date('Y-m-d H:i:s');
+        $store->sync_status = 2; #.设置了信息后 把同步状态改为开始同步
         if (!$store->save()){
             throw new \Exception('保存失败');
         }

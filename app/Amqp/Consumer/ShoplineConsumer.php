@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Amqp\Consumer;
 
+use App\Model\Order;
 use App\Model\OrderPush;
 use App\Model\Store;
 use App\Service\EasyParcel\EasyParcelService;
@@ -63,6 +64,7 @@ echo "\r\n ~~ 推送成功了 ~~ \r\n";
 echo "\r\n ~~ 推送失败了 ~~ \r\n";
             }
             $store = Store::where(['shopline_id' => $data['store_id']])->first();
+            Order::where(['shopline_id' => $data['shopline_id']])->update(['is_exec' => 2, 'update_time' => date('Y-m-d H:i:s')]);
             OrderPush::insert([
                 'order_id' => $data['shopline_id'],
                 'msg' => $msg,

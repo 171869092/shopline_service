@@ -26,6 +26,7 @@ use Qbhy\HyperfAuth\Authenticatable;
  * @property string $easy_api 
  * @property string $easy_auth_key 
  * @property string $easy_service_id 
+ * @property int $sync_status 
  */
 class Store extends Model implements Authenticatable
 {
@@ -47,5 +48,5 @@ class Store extends Model implements Authenticatable
      *
      * @var array
      */
-    protected $casts = ['id' => 'int', 'biz_store_status' => 'integer', 'create_time' => 'datetime', 'update_time' => 'datetime'];
+    protected $casts = ['id' => 'int', 'biz_store_status' => 'integer', 'create_time' => 'datetime', 'update_time' => 'datetime', 'sync_status' => 'integer'];
 }

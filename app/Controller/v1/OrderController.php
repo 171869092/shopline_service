@@ -144,6 +144,11 @@ class OrderController extends AbstractController
     {
         try {
             $params = $request->post();
+            #. 先检查是否能链接
+            $result = $this->easyParcel->testConnect($params['easy_api'], $params['easy_auth_key']);
+            if (!$result){
+                throw new \Exception('连接EasyParcel失败');
+            }
             $this->store->saveStore($params);
             return $response->json(['code' => 200,'msg' => 'ok']);
         }catch (\Exception $e){
