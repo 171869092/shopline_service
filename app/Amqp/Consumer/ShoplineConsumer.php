@@ -31,9 +31,9 @@ echo "\r\n ~~ 我进来了 ~~ \r\n";
             $shipping = json_decode($data['shipping_address'], true);
             $customer = json_decode($data['customer'], true);
             $lineIten = json_decode($data['line_item'], true)[0];
-            $phone = isset($customer['phone']) ? $customer['phone'] : $customer['addresses']['phone'];
+            $phone = isset($shipping['phone']) ? $shipping['phone'] : $customer['addresses']['phone'];
             $push = [
-                'weight' => $data['total_weight'], #. 重量
+                'weight' => bcdiv(intval($data['total_weight']),1000,2), #. 重量
                 'content' => $lineIten['title'], #. 产品内容
                 'value' => $lineIten['quantity'], #. 数量
                 'service_id' => 'EP-CS0WO', #. 目前写死
