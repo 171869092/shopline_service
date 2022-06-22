@@ -96,7 +96,7 @@ class EasyParcelService
      * 下单easyparcel
      * @return bool
      */
-    public function mPSubmitOrderBulk(array $data = []) :array
+    public function mPSubmitOrderBulk(array $data = [],string $authKey = '', string $appKey = '') :array
     {
         if (!$data) return [];
         $path = '/?ac=MPSubmitOrderBulk';
@@ -121,8 +121,9 @@ class EasyParcelService
 //            'sms' => '1'
 //        ];
         $params = [
-            'authentication' => $this->authKey,
-            'api' => $this->appKey,
+//            'authentication' => $this->authKey,
+            'authentication' => $authKey,
+            'api' => $appKey,
             'bulk' => [$data]
         ];
         $result = $this->request($path, $params);

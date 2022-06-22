@@ -53,7 +53,8 @@ echo "\r\n ~~ 我进来了 ~~ \r\n";
                 'sms' => '1',
                 'reference' => $data['shopline_id']
             ];
-            $result = (new EasyParcelService())->mPSubmitOrderBulk($push);
+            $store = Store::where(['shopline_id' => $data['store_id']])->first();
+            $result = (new EasyParcelService())->mPSubmitOrderBulk($push,$store->easy_auth_key, $store->easy_api);
             if ((isset($result['api_status']) && $result['api_status'] == 'Success') && $result['result'][0]['status'] != 'fail'){
 echo "\r\n ~~ 推送成功了 ~~ \r\n";
                 $msg = '推送成功';
@@ -64,7 +65,6 @@ echo "\r\n ~~ 推送成功了 ~~ \r\n";
                 $type = -1;
 echo "\r\n ~~ 推送失败了 ~~ \r\n";
             }
-            $store = Store::where(['shopline_id' => $data['store_id']])->first();
             Order::where(['shopline_id' => $data['shopline_id']])->update(['is_exec' => 2, 'update_time' => date('Y-m-d H:i:s')]);
             OrderPush::insert([
                 'order_id' => $data['shopline_id'],
