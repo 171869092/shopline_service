@@ -87,6 +87,7 @@ class PullServiceCommand extends HyperfCommand
         $respone = $client->post($uri.$path, ['body' => json_encode($params)]);
         $result = $respone->getBody()->getContents();
         $result = json_decode($result, true);
+        print_r($result);
         foreach ($result['result'][0]['rates'] as $v){
             $v['dropoff_point'] = json_encode($v['dropoff_point']);
             $v['pickup_point'] = json_encode($v['pickup_point']);
