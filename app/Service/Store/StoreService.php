@@ -32,7 +32,7 @@ class StoreService{
             throw new \Exception('未找到店铺信息');
         }
         $store->easy_api = $params['easy_api'];
-        $store->easy_auth_key = $params['easy_auth_key'];
+        $store->easy_auth_key = 'XSsMotkzD6'; //. 这里可以写死了！ 全部都是一样的auth key
         $store->easy_service_id = $params['easy_service_id'];
         $store->update_time = date('Y-m-d H:i:s');
         $store->sync_status = 2; #.设置了信息后 把同步状态改为开始同步
