@@ -90,7 +90,7 @@ class ShoplineConsumer extends ConsumerMessage
                 'pick_code' => '409015', #.邮编
                 'pick_country' => 'SG', #. 发送人国家
                 'send_name' => $shipping['first_name']. ' '. $shipping['last_name'], #. 收件人姓名
-                'send_contact' => '+65-'.$phone, #. 收件人电话
+                'send_contact' => $shipping['country_code'] == 'SG' ? '+65-' : '' .$phone, #. 收件人电话
                 'send_unit' => '20', #. 收件 单位
                 'send_addr1' => $shipping['address1']. ' '. $shipping['address2'], #. 收件人地址
                 'send_state' => 'png', #. 收件状态
