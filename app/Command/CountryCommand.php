@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Command\Annotation\Command;
-class countryCommand extends HyperfCommand
+class CountryCommand extends HyperfCommand
 {
     /**
      * @var ContainerInterface
