@@ -247,4 +247,39 @@ class IndexController extends AbstractController
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
     }
+
+    /**
+     * 卸载app
+     * @RequestMapping(path="uninstall", methods="post")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return bool|\Psr\Http\Message\ResponseInterface
+     */
+    public function uninstall(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            $params = $request->post();
+            if (!$params['handle']){
+                throw new \Exception('Params error');
+            }
+            if (!$params['operate']){
+                throw new \Exception('Uninstall Tag Fail!');
+            }
+            if ($params['operate'] == 'UNINSTALL'){
+                $store = Store::where(['store_name' => $params['handle']])->first();
+                if (!$store){
+                    return true;
+                }
+                $token = Token::where(['handle' => $params['handle']])->first();
+                if (!$token){
+                    return true;
+                }
+                $store->delete();
+                $token->delete();
+            }
+            return $response->json(['code' => 200,'msg' => 'ok']);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
+    }
 }
