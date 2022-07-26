@@ -28,16 +28,13 @@ class CountryCommand extends HyperfCommand
     {
         $this->container = $container;
 
-        parent::__construct('c');
+        parent::__construct('add-country');
     }
 
     public function configure()
     {
         parent::configure();
         $this->setDescription('Hyperf Demo Command');
-//        $this->addOption('api', '', InputOption::VALUE_REQUIRED, 'apikey', 'Hyperf');
-//        $this->addOption('auth', '', InputOption::VALUE_REQUIRED, 'authkey', 'Hyperf');
-//        $this->addOption('country', '', InputOption::VALUE_REQUIRED, 'country', 'Hyperf');
     }
 
     public function handle()
