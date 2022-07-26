@@ -13,6 +13,7 @@ use Hyperf\Amqp\Result;
 use Hyperf\Amqp\Annotation\Consumer;
 use Hyperf\Amqp\Message\ConsumerMessage;
 use PhpAmqpLib\Message\AMQPMessage;
+use Hyperf\Di\Annotation\Inject;
 
 /**
  * @Consumer(exchange="hyperf", routingKey="hyperf", queue="hyperf", name="ShoplineConsumer", nums=1, enable=true)
