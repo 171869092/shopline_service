@@ -53,9 +53,10 @@ class PullServiceCommand extends HyperfCommand
         $this->line("~~~ start ~~~", 'info');
         $api = $this->input->getOption('api');
         $auth = $this->input->getOption('auth');
+        $country = $this->input->getOption('country');
 //        $api = $this->input->getArgument('api');
 //        $auth = $this->input->getArgument('auth');
-        if (!$api || !$auth){
+        if (!$api || !$auth || !$country){
             return '未找到参数';
         }
         $params = [
@@ -67,9 +68,9 @@ class PullServiceCommand extends HyperfCommand
                     'pick_state' => 'sgr',
                     'pick_country' => 'SG',
                     'send_code' => '059897',
-                    'send_state' => 'sgr',
-                    'send_country' => 'SG',
-                    'weight' => '14'
+                    'send_state' => strtolower($country),      //. 代表发往哪个国家
+                    'send_country' => $country, //. 代表发往哪个国家
+                    'weight' => '30'
                 ]
             ]
         ];
@@ -91,6 +92,7 @@ class PullServiceCommand extends HyperfCommand
         foreach ($result['result'][0]['rates'] as $v){
             $v['dropoff_point'] = json_encode($v['dropoff_point']);
             $v['pickup_point'] = json_encode($v['pickup_point']);
+            $v['country'] = $country;
             $this->service->insert($v);
         }
         $this->line("~~~ end ~~~", 'info');
