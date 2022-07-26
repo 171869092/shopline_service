@@ -95,7 +95,7 @@ class ShoplineConsumer extends ConsumerMessage
                 'send_addr1' => $shipping['address1']. ' '. $shipping['address2'], #. 收件人地址
                 'send_addr2' => '',
                 'send_addr3' => '',
-                'send_city' => '',
+                'send_city' => $shipping['city'] ?? '',
                 'send_state' => $shipping['country_code'], #. 不知道啥玩意
                 'send_code' => $shipping['zip'],#. 收件人邮编
                 'send_country' => $shipping['country_code'], #. 收件人国家
