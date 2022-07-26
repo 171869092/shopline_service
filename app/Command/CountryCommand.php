@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Model\Country;
+
 use Hyperf\Command\Command as HyperfCommand;
-use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Hyperf\Di\Annotation\Inject;
 use Hyperf\Command\Annotation\Command;
+use Hyperf\Guzzle\CoroutineHandler;
+use Psr\Container\ContainerInterface;
+use Hyperf\Di\Annotation\Inject;
+use Symfony\Component\Console\Input\InputOption;
 class CountryCommand extends HyperfCommand
 {
     /**
@@ -26,7 +28,7 @@ class CountryCommand extends HyperfCommand
     {
         $this->container = $container;
 
-        parent::__construct('country');
+        parent::__construct('c');
     }
 
     public function configure()
