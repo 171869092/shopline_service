@@ -11,6 +11,11 @@ use Hyperf\Guzzle\CoroutineHandler;
 use Psr\Container\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
 use Symfony\Component\Console\Input\InputOption;
+
+/**
+ * @Command
+ */
+#[Command]
 class CountryCommand extends HyperfCommand
 {
     /**
