@@ -8,6 +8,7 @@ use Hyperf\Command\Command as HyperfCommand;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\Command\Annotation\Command;
 class countryCommand extends HyperfCommand
 {
     /**
