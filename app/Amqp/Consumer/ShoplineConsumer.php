@@ -93,7 +93,10 @@ class ShoplineConsumer extends ConsumerMessage
                 'send_contact' => $shipping['country_code'] == 'SG' ? '+65-' : '' .$phone, #. 收件人电话
                 'send_unit' => '20', #. 收件 单位
                 'send_addr1' => $shipping['address1']. ' '. $shipping['address2'], #. 收件人地址
-                'send_state' => 'png', #. 收件状态
+                'send_addr2' => '',
+                'send_addr3' => '',
+                'send_city' => '',
+                'send_state' => $shipping['country_code'], #. 不知道啥玩意
                 'send_code' => $shipping['zip'],#. 收件人邮编
                 'send_country' => $shipping['country_code'], #. 收件人国家
                 'collect_date' => date('Y-m-d'), #. 时间
