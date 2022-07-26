@@ -89,7 +89,7 @@ class IndexController extends AbstractController
             }
             $result = $this->easyParcel->getConfig($get['handle']);
 
-            return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $result['data'],'service' => $result['service']]);
+            return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $result['data']]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
@@ -221,10 +221,30 @@ class IndexController extends AbstractController
     public function getCountry(RequestInterface $request, ResponseInterface $response)
     {
         $data =  Country::get();
-        foreach ($data as &$v){
-            $ser = Service::where(['country' => $v['code']])->get();
-            $v['services'] = $ser;
-        }
+//        foreach ($data as &$v){
+//            $ser = Service::where(['country' => $v['code']])->get();
+//            $v['services'] = $ser;
+//        }
         return $response->json(['code' => 200,'msg' => 'ok', 'data' => $data]);
+    }
+
+    /**
+     * 获取国家service id
+     * @RequestMapping(path="get-country-info", methods="get")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     */
+    public function getCountryInfo(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            $params = $request->all();
+            if (!isset($params['code']) && empty($params['code'])){
+                throw new \Exception('Country code not found');
+            }
+            $data = Service::where(['country' => $params['code']])->get();
+            return $response->json(['code' => 200,'msg' => 'ok', 'data' => $data]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
     }
 }
