@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace App\Controller\v1;
 use App\Common\Request;
 use App\Constants\ErrorCode;
+use App\Model\Country;
+use App\Model\Service;
 use App\Model\Store;
 use App\Model\Token;
 use App\Service\EasyParcel\EasyParcelService;
@@ -207,6 +209,22 @@ class IndexController extends AbstractController
         $data = $this->resServer->requestStore($uri, $url,$token);
         echo "\r\n resStore = \r\n";
         print_r($data);
+        return $response->json(['code' => 200,'msg' => 'ok', 'data' => $data]);
+    }
+
+    /**
+     * 获取国家
+     * @RequestMapping(path="get-country", methods="get")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     */
+    public function getCountry(RequestInterface $request, ResponseInterface $response)
+    {
+        $data =  Country::get();
+        foreach ($data as &$v){
+            $ser = Service::where(['country' => $v['code']])->get();
+            $v['services'] = $ser;
+        }
         return $response->json(['code' => 200,'msg' => 'ok', 'data' => $data]);
     }
 }
