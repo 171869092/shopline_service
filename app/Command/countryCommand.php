@@ -25,7 +25,7 @@ class countryCommand extends HyperfCommand
     {
         $this->container = $container;
 
-        parent::__construct('pull:service');
+        parent::__construct('country');
     }
 
     public function configure()
