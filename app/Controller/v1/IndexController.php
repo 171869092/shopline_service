@@ -89,7 +89,7 @@ class IndexController extends AbstractController
             }
             $result = $this->easyParcel->getConfig($get['handle']);
 
-            return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $result['data']]);
+            return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $result['data'] ?? []]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
