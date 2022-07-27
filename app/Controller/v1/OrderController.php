@@ -119,7 +119,7 @@ class OrderController extends AbstractController
             if (!$post){
                 throw new \Exception('参数错误');
             }
-            $result = $this->easyParcel->testConnect($post['api'], $post['auth_key']);
+            $result = $this->easyParcel->testConnect($post['api']);
             return $response->json(['code' => 200,'msg' => '连接成功', 'data' => $result]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
@@ -155,7 +155,7 @@ class OrderController extends AbstractController
         try {
             $params = $request->post();
             #. 先检查是否能链接
-            $result = $this->easyParcel->testConnect($params['easy_api'], $params['easy_auth_key']);
+            $result = $this->easyParcel->testConnect($params['easy_api']);
             if (!$result){
                 throw new \Exception('连接EasyParcel失败');
             }
