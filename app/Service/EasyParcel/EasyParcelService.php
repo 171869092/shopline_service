@@ -157,10 +157,10 @@ class EasyParcelService
      * @param string $auth
      * @return bool
      */
-    public function testConnect(string $api, string $auth) :bool
+    public function testConnect(string $api, string $auth = 'XSsMotkzD6') :bool
     {
         $params = [
-            'authentication' => $auth,
+            'authentication' => 'XSsMotkzD6',
             'api' => $api,
             'bulk' => [
                 [
