@@ -98,7 +98,7 @@ class ShoplineConsumer extends ConsumerMessage
                 'pick_country' => 'SG', #. 发送人国家
                 'send_name' => $shipping['first_name']. ' '. $shipping['last_name'], #. 收件人姓名
                 'send_contact' => $are .$phone, #. 收件人电话
-                'send_unit' => '', #. 收件 单位
+                'send_unit' => '1', #. 收件 单位
                 'send_addr1' => $shipping['address1']. ' '. $shipping['address2'], #. 收件人地址
                 'send_addr2' => '',
                 'send_addr3' => '',
