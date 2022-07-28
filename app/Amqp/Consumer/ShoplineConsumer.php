@@ -86,7 +86,7 @@ class ShoplineConsumer extends ConsumerMessage
 //                'service_id' => 'EP-CS0WO', #. 目前写死
                 'service_id' => $store->easy_service_id, #. 目前写死
 //                'pick_name' => 'Yong Tat', #. 发送人姓名
-                'pick_name' => $store->easy_send_first_name . $store->easy_send_last_name, #. 发送人姓名
+                'pick_name' => $store->easy_send_first_name .' '. $store->easy_send_last_name, #. 发送人姓名
 //                'pick_contact' => '+65-6581175298', #. 发送人电话
                 'pick_contact' => $store->easy_send_phone, #. 发送人电话
                 'pick_addr1' => $store->easy_address, #. 发送人地址
