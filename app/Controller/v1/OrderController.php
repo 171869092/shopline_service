@@ -121,7 +121,7 @@ class OrderController extends AbstractController
             }
             $result = $this->easyParcel->testConnect($post['api']);
             if (!$result){
-                return $response->json(['code' => 200,'msg' => 'Connect Fail!', 'data' => $result]);
+                throw new \Exception('Connect Fail!')
             }
             return $response->json(['code' => 200,'msg' => 'Connect Success!', 'data' => $result]);
         }catch (\Exception $e){
