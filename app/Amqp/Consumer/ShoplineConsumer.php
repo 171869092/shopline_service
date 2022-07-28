@@ -92,7 +92,7 @@ class ShoplineConsumer extends ConsumerMessage
                 'pick_addr1' => $store->easy_address, #. 发送人地址
                 'pick_addr2' => '',
                 'pick_addr3' => '',
-                'pick_unit' => '', #. 单位
+                'pick_unit' => "''", #. 单位
 //                'pick_code' => '409015', #.邮编
                 'pick_code' => $store->easy_post_code, #.邮编
                 'pick_country' => 'SG', #. 发送人国家
