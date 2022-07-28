@@ -27,6 +27,9 @@ use Qbhy\HyperfAuth\Authenticatable;
  * @property string $easy_auth_key 
  * @property string $easy_service_id 
  * @property int $sync_status 
+ * @property string $easy_send_name 
+ * @property string $easy_send_phone 
+ * @property string $easy_address 
  */
 class Store extends Model implements Authenticatable
 {
