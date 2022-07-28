@@ -117,10 +117,13 @@ class OrderController extends AbstractController
         try {
             $post = $request->post();
             if (!$post){
-                throw new \Exception('参数错误');
+                throw new \Exception('Params error');
             }
             $result = $this->easyParcel->testConnect($post['api']);
-            return $response->json(['code' => 200,'msg' => '连接成功', 'data' => $result]);
+            if (!$result){
+                return $response->json(['code' => 200,'msg' => 'Connect Fail!', 'data' => $result]);
+            }
+            return $response->json(['code' => 200,'msg' => 'Connect Success!', 'data' => $result]);
         }catch (\Exception $e){
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
@@ -157,7 +160,7 @@ class OrderController extends AbstractController
             #. 先检查是否能链接
             $result = $this->easyParcel->testConnect($params['easy_api']);
             if (!$result){
-                throw new \Exception('连接EasyParcel失败');
+                throw new \Exception('Connect EasyParcel Fail!');
             }
             $this->store->saveStore($params);
             return $response->json(['code' => 200,'msg' => 'ok']);
