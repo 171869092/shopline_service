@@ -217,7 +217,8 @@ class EasyParcelService
         $store = $store->toArray() ?? [];
         $store['easy_service_name'] = '';
         if ($store){
-            $store['easy_service_name'] = $this->serviceModel->where('service_id',$store['easy_service_id'])->get();
+            $service = $this->serviceModel->where('service_id',$store['easy_service_id'])->first();
+            $store['easy_service_name'] = $service->service_name;
         }
         return ['data' => $store];
     }
