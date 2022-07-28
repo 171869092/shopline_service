@@ -214,8 +214,12 @@ class EasyParcelService
         if (!$store){
             return ['data' => []];
         }
-//        $serviceList = $this->serviceModel->get();
-        return ['data' => $store->toArray() ?? []];
+        $store = $store->toArray() ?? [];
+        $store['easy_service_name'] = '';
+        if ($store){
+            $store['easy_service_name'] = $this->serviceModel->where('service_id',$store['easy_service_id'])->get();
+        }
+        return ['data' => $store];
     }
 
     /**
