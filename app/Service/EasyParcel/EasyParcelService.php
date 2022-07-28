@@ -278,6 +278,7 @@ class EasyParcelService
         $store->easy_send_phone = $params['easy_send_phone'];
         $store->easy_address = $params['easy_address'];
         $store->easy_post_code = $params['easy_post_code'];
+        $store->easy_pick_unit = isset($params['easy_pick_unit']) ? $params['easy_pick_unit'] : '';
         $store->update_time = date('Y-m-d H:i:s');
         if (!$store->save()){
             throw new \Exception('Save Fail');
