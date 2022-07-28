@@ -247,4 +247,41 @@ class EasyParcelService
             ->toArray();
         return ['count' => $count, 'data' => $data];
     }
+
+    /**
+     * 获取地址
+     * @param string $handle
+     * @return array
+     */
+    public function getAdress(string $handle) :array
+    {
+        $store = $this->storeModel->where(['store_name' => $handle])->first();
+        if (!$store){
+            return [];
+        }
+        return $store->toArray();
+    }
+
+    /**
+     * 保存地址
+     * @param string $handle
+     * @return bool
+     */
+    public function saveAddress(string $handle, array $params) :bool
+    {
+        $store = $this->storeModel->where(['store_name' => $handle])->first();
+        if (!$store){
+            return false;
+        }
+        $store->easy_send_first_name = $params['easy_send_first_name'];
+        $store->easy_send_last_name = $params['easy_send_last_name'];
+        $store->easy_send_phone = $params['easy_send_phone'];
+        $store->easy_address = $params['easy_address'];
+        $store->easy_post_code = $params['easy_post_code'];
+        $store->update_time = date('Y-m-d H:i:s');
+        if (!$store->save()){
+            throw new \Exception('Save Fail');
+        }
+        return true;
+    }
 }

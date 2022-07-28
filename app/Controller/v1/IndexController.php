@@ -96,6 +96,49 @@ class IndexController extends AbstractController
     }
 
     /**
+     * 获取默认地址
+     * @RequestMapping(path="get-address", methods="get")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function getAddress(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            if (!$get = $request->all()){
+                throw new \Exception('Params error');
+            }
+            $result = $this->easyParcel->getAdress($get['handle']);
+            return $response->json(['code' => 200, 'msg' => 'ok', 'data' => $result ?? []]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * 保存地址
+     * @RequestMapping(path="address", methods="post")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function address(RequestInterface $request, ResponseInterface $response)
+    {
+        try {
+            if (!$post = $request->post()){
+                throw new \Exception('Params error');
+            }
+            if (!$post['handle']){
+                throw new \Exception('Handle not found');
+            }
+            $result = $this->easyParcel->saveAddress((string)$post['handle'], (array)$post);
+            return $response->json(['code' => 200, 'msg' => 'Save Success', 'data' => $result]);
+        }catch (\Exception $e){
+            return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    /**
      * 安装授权的地方
      * @RequestMapping(path="call", methods="get")
      */
