@@ -46,7 +46,7 @@ class ShoplineConsumer extends ConsumerMessage
             $lineIten = json_decode($data['line_item'], true)[0];
             $phone = isset($shipping['phone']) ? $shipping['phone'] : $customer['addresses']['phone'];
             #. addresss 2
-            $sendUnit = isset($customer['addresses']['address2']) ? $customer['addresses']['address2'] : '1';
+            $sendUnit = isset($customer['addresses']['address2']) && !empty($customer['addresses']['address2']) ? $customer['addresses']['address2'] : '1';
             //. 获取service id
             $store = $this->stores->where(['shopline_id' => $data['store_id']])->first();
             #. 先判断国家是否是 设置的service id 支持的
