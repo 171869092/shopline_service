@@ -259,6 +259,7 @@ class EasyParcelService
         if (!$store){
             return [];
         }
+        $store->easy_send_phone = str_replace('+65','',$store->easy_send_phone);
         return $store->toArray();
     }
 
