@@ -223,4 +223,27 @@ class OrderController extends AbstractController
             return $response->json(['code' => ErrorCode::NORMAL_ERROR, 'msg' => $e->getMessage()]);
         }
     }
+    /**
+     * 手动
+     * @RequestMapping(path="hans", methods="get")
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     */
+    public function hans(RequestInterface $request, ResponseInterface $response)
+    {
+        $result = true;
+        $params = $request->all();
+        $store = Store::where(['store_name' => $params['handle']])->first();
+        if (!$store){
+            throw new \Exception('Store nou found');
+        }
+        $order = Order::where(['store_id' => $store->shopline_id, 'is_exec' => 1])->get();
+        if (!$order){
+            return $response->json(['code' => 200,'msg' => 'ok', 'data' => $result]);
+        }
+        foreach ($order->toArray() as $v){
+            $this->producer->produce(new ShoplineProducer($v));
+        }
+        return $response->json(['code' => 200,'msg' => 'ok']);
+    }
 }
