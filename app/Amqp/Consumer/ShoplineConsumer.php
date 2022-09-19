@@ -130,7 +130,7 @@ class ShoplineConsumer extends ConsumerMessage
                     $insert['msg'] = '推送成功';
                     $insert['type'] = 1;
 //                    $type = 1;
-
+                    Order::where(['shopline_id' => $data['shopline_id']])->update(['is_exec' => 2, 'update_time' => date('Y-m-d H:i:s')]);
                 }else{
                     echo "\r\n ~~ 推送失败了 ~~ \r\n";
                     $insert['msg'] = '推送失败';
@@ -139,7 +139,6 @@ class ShoplineConsumer extends ConsumerMessage
 //                    $type = -1;
                 }
                 $insert['return_value'] = json_encode($result);
-                Order::where(['shopline_id' => $data['shopline_id']])->update(['is_exec' => 2, 'update_time' => date('Y-m-d H:i:s')]);
             }else{
                 //. 这里就不推送了, 但是需要记录日志
                 $insert['type'] = -1;
