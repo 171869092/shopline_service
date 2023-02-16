@@ -81,6 +81,11 @@ class ShoplineConsumer extends ConsumerMessage
                 }
             }
             $are = $shipping['country_code'] == 'SG' ? '+65-' : '';
+            if ($are == 'SG'){
+                if (false !== strpos($phone, '+65')){
+                    $phone = str_replace('+65','',$phone);
+                }
+            }
             $push = [
                 'weight' => bcdiv(strval($data['total_weight']),'1000',2), #. 重量
                 'content' => $lineIten['title'], #. 产品内容
