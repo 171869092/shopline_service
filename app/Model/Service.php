@@ -39,7 +39,7 @@ class Service extends Model
      *
      * @var array
      */
-    protected $fillable = ['rate_id','service_detail','service_id','service_type','courier_id','courier_name','courier_logo','scheduled_start_date','pickup_date','delivery','price','addon_price','shipment_price','service_name','dropoff_point','pickup_point','conutry'];
+    protected $fillable = ['rate_id','service_detail','service_id','service_type','courier_id','courier_name','courier_logo','scheduled_start_date','pickup_date','delivery','price','addon_price','shipment_price','service_name','dropoff_point','pickup_point','country'];
     /**
      * The attributes that should be cast to native types.
      *
