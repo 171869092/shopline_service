@@ -94,7 +94,8 @@ class PullServiceCommand extends HyperfCommand
             $v['dropoff_point'] = json_encode($v['dropoff_point']);
             $v['pickup_point'] = json_encode($v['pickup_point']);
             $v['country'] = $country;
-            $this->service->insert($v);
+            $this->service->create($v);
+//            $this->service->insert($v);
         }
         $this->line("~~~ end ~~~", 'info');
     }
