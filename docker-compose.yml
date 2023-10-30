@@ -13,12 +13,13 @@ services:
       - .:/data/project
     ports:
       - "9591:9501"
-      - "9592:9502"
-      - "9594:9504"
     command: php bin/hyperf.php start
+    links:
+      - rabbitmq
+      - redis
     networks:
       shopline:
-        ipv4_address: 179.21.0.8
+        ipv4_address: 179.41.0.8
   redis:
     image: redis:alpine
     container_name: shopline_server_redis
@@ -26,4 +27,18 @@ services:
      - "6690:6379"
     networks:
       shopline:
-        ipv4_address: 179.21.0.4
+        ipv4_address: 179.41.0.4
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    hostname: myrabbitmq
+    restart: always
+    volumes:
+      - ./queue/rabbitmq:/var/lib/rabbitmq/mnesia
+    ports:
+      - "5672:5672" # mq
+      - "15672:15672" # admin
+      - "4369:4369"
+      - "25672:25672"
+    networks:
+      shopline:
+        ipv4_address: 179.41.0.9
